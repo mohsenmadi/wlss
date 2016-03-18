@@ -1,0 +1,398 @@
+15 Dec 2015 16:00:53.377 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to members/findfirm/A082830
+15 Dec 2015 16:00:53.597 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:00:53.848 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to members/syncnca/A082830
+15 Dec 2015 16:00:54.174 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:00:54.192 :: INFO :: grails.app.services.com.lss.service.LssWsService -  == firm has 2 lawyers
+15 Dec 2015 16:00:54.381 :: INFO :: grails.app.services.com.lss.service.LssWsService -   == adding 1/2 A024371F: 
+15 Dec 2015 16:00:54.406 :: INFO :: grails.app.services.com.lss.service.LssWsService - 
+15 Dec 2015 16:00:54.575 :: INFO :: grails.app.services.com.lss.service.LssWsService -   == adding 2/2 A030522U: 
+15 Dec 2015 16:00:54.585 :: INFO :: grails.app.services.com.lss.service.LssWsService - 
+15 Dec 2015 16:00:54.586 :: INFO :: grails.app.services.com.lss.service.LssWsService - ==== time taken: 393
+15 Dec 2015 16:00:59.470 :: INFO :: g.a.c.com.lss.dispatch.DispatchController - User A082830 in.
+15 Dec 2015 16:00:59.487 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to members/findfirm/A082830
+15 Dec 2015 16:00:59.579 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:00:59.681 :: INFO :: grails.app.services.com.lss.service.LssWsService - =4= [referKey:A082830, password:ERNEST, province:ON, city:Ottawa, street:#204  6 Antares Drive, name:Hedges & Sutherland, postCode:K2E 8A9, fax:613-234-0954, email:, enabled:true]
+15 Dec 2015 16:00:59.693 :: INFO :: g.a.c.com.lss.dispatch.DispatchController - == updateResponse: proceed
+15 Dec 2015 16:00:59.696 :: INFO :: g.a.c.com.lss.dispatch.DispatchController - ===============================
+15 Dec 2015 16:00:59.696 :: INFO :: g.a.c.com.lss.dispatch.DispatchController - === firm logging in: A082830 @ Tue Dec 15 16:00:59 EST 2015
+15 Dec 2015 16:00:59.696 :: INFO :: g.a.c.com.lss.dispatch.DispatchController - ===============================
+15 Dec 2015 16:00:59.739 :: INFO :: grails.app.services.com.lss.service.LssWsService - *** updating 2014 - Q1 ***
+15 Dec 2015 16:00:59.741 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to amnd/sync/A082830/2014/1?lt=-1
+15 Dec 2015 16:00:59.893 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:00:59.904 :: INFO :: grails.app.services.com.lss.service.LssWsService - *** updating 2014 - Q2 ***
+15 Dec 2015 16:00:59.905 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to amnd/sync/A082830/2014/2?lt=-1
+15 Dec 2015 16:01:00.037 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:01:00.041 :: INFO :: grails.app.services.com.lss.service.LssWsService - *** updating 2014 - Q3 ***
+15 Dec 2015 16:01:00.041 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to amnd/sync/A082830/2014/3?lt=-1
+15 Dec 2015 16:01:00.183 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:01:00.186 :: INFO :: grails.app.services.com.lss.service.LssWsService - *** updating 2014 - Q4 ***
+15 Dec 2015 16:01:00.187 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to amnd/sync/A082830/2014/4?lt=-1
+15 Dec 2015 16:01:00.323 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:01:00.327 :: INFO :: grails.app.services.com.lss.service.LssWsService - *** updating 2015 - Q1 ***
+15 Dec 2015 16:01:00.328 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to amnd/sync/A082830/2015/1?lt=-1
+15 Dec 2015 16:01:00.649 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:01:00.667 :: INFO :: grails.app.services.com.lss.service.LssWsService - ==the json== [dateTime:Nov 23, 2015T15:50:37, members:[[fname:Jill Marie, lname:Knudsen, referKey:A028957A, password:A028957Alss, exemptRe:false, exemptCl:false, inRe:false, enabled:true, inCl:true], [fname:Rolland Ernest, lname:Hedges, referKey:A024371F, password:161677, exemptRe:false, exemptCl:false, inRe:false, enabled:true, inCl:true]], numbers:[re:[val:0, isFiled:false], cl:[val:1, isFiled:true], reo:[val:0, isFiled:false]], confirmation:WA-1428256]
+15 Dec 2015 16:01:00.672 :: INFO :: grails.app.services.com.lss.service.LssWsService - ===newAmnd==== 25: conf: WA-1428256, (1, null, null), mas:null
+15 Dec 2015 16:01:00.837 :: INFO :: grails.app.services.com.lss.service.LssWsService -    == created amnd 1: 25: conf: WA-1428256, (1, null, null), mas:3
+15 Dec 2015 16:01:00.855 :: INFO :: grails.app.services.com.lss.service.LssWsService - *** updating 2015 - Q2 ***
+15 Dec 2015 16:01:00.855 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to amnd/sync/A082830/2015/2?lt=-1
+15 Dec 2015 16:01:00.986 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:01:00.993 :: INFO :: grails.app.services.com.lss.service.LssWsService - ==the json== [dateTime:Nov 24, 2015T14:54:21, members:[[fname:Howard Floyd, lname:Manis, referKey:A034366V, password:A034366Vlss, exemptRe:false, exemptCl:false, inRe:false, enabled:true, inCl:true]], numbers:[re:[val:0, isFiled:false], cl:[val:1, isFiled:true], reo:[val:0, isFiled:false]], confirmation:WA-1428270]
+15 Dec 2015 16:01:00.995 :: INFO :: grails.app.services.com.lss.service.LssWsService - ===newAmnd==== 34: conf: WA-1428270, (1, null, null), mas:null
+15 Dec 2015 16:01:01.239 :: INFO :: grails.app.services.com.lss.service.LssWsService -    == created amnd 1: 34: conf: WA-1428270, (1, null, null), mas:3
+15 Dec 2015 16:01:01.246 :: INFO :: grails.app.services.com.lss.service.LssWsService - *** updating 2015 - Q3 ***
+15 Dec 2015 16:01:01.246 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to amnd/sync/A082830/2015/3?lt=-1
+15 Dec 2015 16:01:01.694 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:01:01.700 :: INFO :: grails.app.services.com.lss.service.LssWsService - ==the json== [dateTime:Dec 15, 2015T14:39:12, members:[[fname:Rolland Ernest, lname:Hedges, referKey:A024371F, password:161677, exemptRe:false, exemptCl:false, inRe:false, enabled:true, inCl:true]], numbers:[re:[val:0, isFiled:false], cl:[val:1, isFiled:true], reo:[val:0, isFiled:false]], confirmation:WA-1428308]
+15 Dec 2015 16:01:01.703 :: INFO :: grails.app.services.com.lss.service.LssWsService - ===newAmnd==== 43: conf: WA-1428308, (1, null, null), mas:null
+15 Dec 2015 16:01:01.705 :: INFO :: grails.app.services.com.lss.service.LssWsService -    == created amnd 1: 43: conf: WA-1428308, (1, null, null), mas:2
+15 Dec 2015 16:01:01.706 :: INFO :: grails.app.services.com.lss.service.LssWsService - ==the json== [dateTime:Dec 15, 2015T14:41:05, members:[[fname:Rolland Ernest, lname:Hedges, referKey:A024371F, password:161677, exemptRe:false, exemptCl:false, inRe:false, enabled:true, inCl:true]], numbers:[re:[val:0, isFiled:false], cl:[val:2, isFiled:true], reo:[val:0, isFiled:false]], confirmation:WA-1428311]
+15 Dec 2015 16:01:01.707 :: INFO :: grails.app.services.com.lss.service.LssWsService - ===newAmnd==== 44: conf: WA-1428311, (3, null, null), mas:null
+15 Dec 2015 16:01:01.708 :: INFO :: grails.app.services.com.lss.service.LssWsService -    == created amnd 2: 44: conf: WA-1428311, (3, null, null), mas:2
+15 Dec 2015 16:01:01.709 :: INFO :: grails.app.services.com.lss.service.LssWsService - ==the json== [dateTime:Dec 15, 2015T14:42:00, members:[[fname:Rolland Ernest, lname:Hedges, referKey:A024371F, password:161677, exemptRe:false, exemptCl:false, inRe:false, enabled:true, inCl:true], [fname:Alison Velda, lname:Sutherland, referKey:A030522U, password:KYLA, exemptRe:false, exemptCl:false, inRe:true, enabled:true, inCl:false]], numbers:[re:[val:1, isFiled:true], cl:[val:0, isFiled:true], reo:[val:0, isFiled:false]], confirmation:WA-1428312]
+15 Dec 2015 16:01:01.711 :: INFO :: grails.app.services.com.lss.service.LssWsService - ===newAmnd==== 45: conf: WA-1428312, (3, 1, null), mas:null
+15 Dec 2015 16:01:01.712 :: INFO :: grails.app.services.com.lss.service.LssWsService -    == created amnd 3: 45: conf: WA-1428312, (3, 1, null), mas:2
+15 Dec 2015 16:01:01.721 :: INFO :: grails.app.services.com.lss.service.LssWsService - *** updating 2015 - Q4 ***
+15 Dec 2015 16:01:01.722 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to amnd/sync/A082830/2015/4?lt=-1
+15 Dec 2015 16:01:02.007 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:01:02.013 :: INFO :: grails.app.services.com.lss.service.LssWsService - ==the json== [dateTime:Dec 15, 2015T14:42:57, members:[[fname:Rolland Ernest, lname:Hedges, referKey:A024371F, password:161677, exemptRe:false, exemptCl:false, inRe:false, enabled:true, inCl:true], [fname:Alison Velda, lname:Sutherland, referKey:A030522U, password:KYLA, exemptRe:false, exemptCl:false, inRe:false, enabled:true, inCl:true]], numbers:[re:[val:0, isFiled:false], cl:[val:0, isFiled:true], reo:[val:0, isFiled:false]], confirmation:WA-1428313]
+15 Dec 2015 16:01:02.016 :: INFO :: grails.app.services.com.lss.service.LssWsService - ===newAmnd==== 46: conf: WA-1428313, (0, null, null), mas:null
+15 Dec 2015 16:01:02.018 :: INFO :: grails.app.services.com.lss.service.LssWsService -    == created amnd 1: 46: conf: WA-1428313, (0, null, null), mas:2
+15 Dec 2015 16:01:02.026 :: INFO :: grails.app.services.com.lss.service.LssWsService - ==== time taken: 2319
+15 Dec 2015 16:01:02.225 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to xmpt/status/A082830?years=2014,2015
+15 Dec 2015 16:01:02.408 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:01:02.435 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to pay/ow/A082830
+15 Dec 2015 16:01:02.577 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:01:02.658 :: INFO :: grails.app.services.com.lss.service.WsReqService - making postWsr to xmpt/sync/
+15 Dec 2015 16:01:02.757 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of postWsr
+15 Dec 2015 16:02:44.472 :: INFO :: g.a.c.com.lss.dispatch.DispatchController - User A082830 in.
+15 Dec 2015 16:02:44.479 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to members/findfirm/A082830
+15 Dec 2015 16:02:44.584 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:02:44.681 :: INFO :: grails.app.services.com.lss.service.LssWsService - =4= [referKey:A082830, password:ERNEST, province:ON, city:Ottawa, street:#204  6 Antares Drive, name:Hedges & Sutherland, postCode:K2E 8A9, fax:613-234-0954, email:, enabled:true]
+15 Dec 2015 16:02:44.685 :: INFO :: g.a.c.com.lss.dispatch.DispatchController - == updateResponse: proceed
+15 Dec 2015 16:02:44.687 :: INFO :: g.a.c.com.lss.dispatch.DispatchController - ===============================
+15 Dec 2015 16:02:44.687 :: INFO :: g.a.c.com.lss.dispatch.DispatchController - === firm logging in: A082830 @ Tue Dec 15 16:02:44 EST 2015
+15 Dec 2015 16:02:44.687 :: INFO :: g.a.c.com.lss.dispatch.DispatchController - ===============================
+15 Dec 2015 16:02:44.698 :: INFO :: grails.app.services.com.lss.service.LssWsService - *** updating 2014 - Q1 ***
+15 Dec 2015 16:02:44.698 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to amnd/sync/A082830/2014/1?lt=-1
+15 Dec 2015 16:02:44.858 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:02:44.861 :: INFO :: grails.app.services.com.lss.service.LssWsService - *** updating 2014 - Q2 ***
+15 Dec 2015 16:02:44.862 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to amnd/sync/A082830/2014/2?lt=-1
+15 Dec 2015 16:02:45.024 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:02:45.028 :: INFO :: grails.app.services.com.lss.service.LssWsService - *** updating 2014 - Q3 ***
+15 Dec 2015 16:02:45.028 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to amnd/sync/A082830/2014/3?lt=-1
+15 Dec 2015 16:02:45.181 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:02:45.185 :: INFO :: grails.app.services.com.lss.service.LssWsService - *** updating 2014 - Q4 ***
+15 Dec 2015 16:02:45.185 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to amnd/sync/A082830/2014/4?lt=-1
+15 Dec 2015 16:02:45.339 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:02:45.345 :: INFO :: grails.app.services.com.lss.service.LssWsService - *** updating 2015 - Q1 ***
+15 Dec 2015 16:02:45.345 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to amnd/sync/A082830/2015/1?lt=1880495
+15 Dec 2015 16:02:45.501 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:02:45.505 :: INFO :: grails.app.services.com.lss.service.LssWsService - *** updating 2015 - Q2 ***
+15 Dec 2015 16:02:45.505 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to amnd/sync/A082830/2015/2?lt=1880506
+15 Dec 2015 16:02:45.645 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:02:45.649 :: INFO :: grails.app.services.com.lss.service.LssWsService - *** updating 2015 - Q3 ***
+15 Dec 2015 16:02:45.649 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to amnd/sync/A082830/2015/3?lt=1880548
+15 Dec 2015 16:02:45.793 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:02:45.797 :: INFO :: grails.app.services.com.lss.service.LssWsService - *** updating 2015 - Q4 ***
+15 Dec 2015 16:02:45.797 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to amnd/sync/A082830/2015/4?lt=1880549
+15 Dec 2015 16:02:45.953 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:02:45.957 :: INFO :: grails.app.services.com.lss.service.LssWsService - ==== time taken: 1265
+15 Dec 2015 16:02:45.958 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to xmpt/status/A082830?years=2014,2015
+15 Dec 2015 16:02:46.166 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:02:46.173 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to pay/ow/A082830
+15 Dec 2015 16:02:46.335 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:02:46.364 :: INFO :: grails.app.services.com.lss.service.WsReqService - making postWsr to xmpt/sync/
+15 Dec 2015 16:02:46.479 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of postWsr
+15 Dec 2015 16:03:30.404 :: INFO :: g.a.c.com.lss.dispatch.DispatchController - User A082830 in.
+15 Dec 2015 16:03:30.409 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to members/findfirm/A082830
+15 Dec 2015 16:03:30.504 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:03:30.592 :: INFO :: grails.app.services.com.lss.service.LssWsService - =4= [referKey:A082830, password:ERNEST, province:ON, city:Ottawa, street:#204  6 Antares Drive, name:Hedges & Sutherland, postCode:K2E 8A9, fax:613-234-0954, email:, enabled:true]
+15 Dec 2015 16:03:30.595 :: INFO :: g.a.c.com.lss.dispatch.DispatchController - == updateResponse: proceed
+15 Dec 2015 16:03:30.596 :: INFO :: g.a.c.com.lss.dispatch.DispatchController - ===============================
+15 Dec 2015 16:03:30.597 :: INFO :: g.a.c.com.lss.dispatch.DispatchController - === firm logging in: A082830 @ Tue Dec 15 16:03:30 EST 2015
+15 Dec 2015 16:03:30.597 :: INFO :: g.a.c.com.lss.dispatch.DispatchController - ===============================
+15 Dec 2015 16:03:30.605 :: INFO :: grails.app.services.com.lss.service.LssWsService - *** updating 2014 - Q1 ***
+15 Dec 2015 16:03:30.606 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to amnd/sync/A082830/2014/1?lt=-1
+15 Dec 2015 16:03:30.737 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:03:30.740 :: INFO :: grails.app.services.com.lss.service.LssWsService - *** updating 2014 - Q2 ***
+15 Dec 2015 16:03:30.740 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to amnd/sync/A082830/2014/2?lt=-1
+15 Dec 2015 16:03:30.871 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:03:30.874 :: INFO :: grails.app.services.com.lss.service.LssWsService - *** updating 2014 - Q3 ***
+15 Dec 2015 16:03:30.875 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to amnd/sync/A082830/2014/3?lt=-1
+15 Dec 2015 16:03:31.006 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:03:31.008 :: INFO :: grails.app.services.com.lss.service.LssWsService - *** updating 2014 - Q4 ***
+15 Dec 2015 16:03:31.009 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to amnd/sync/A082830/2014/4?lt=-1
+15 Dec 2015 16:03:31.140 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:03:31.145 :: INFO :: grails.app.services.com.lss.service.LssWsService - *** updating 2015 - Q1 ***
+15 Dec 2015 16:03:31.145 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to amnd/sync/A082830/2015/1?lt=1880495
+15 Dec 2015 16:03:31.272 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:03:31.275 :: INFO :: grails.app.services.com.lss.service.LssWsService - *** updating 2015 - Q2 ***
+15 Dec 2015 16:03:31.276 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to amnd/sync/A082830/2015/2?lt=1880506
+15 Dec 2015 16:03:31.403 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:03:31.406 :: INFO :: grails.app.services.com.lss.service.LssWsService - *** updating 2015 - Q3 ***
+15 Dec 2015 16:03:31.406 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to amnd/sync/A082830/2015/3?lt=1880548
+15 Dec 2015 16:03:31.551 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:03:31.554 :: INFO :: grails.app.services.com.lss.service.LssWsService - *** updating 2015 - Q4 ***
+15 Dec 2015 16:03:31.554 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to amnd/sync/A082830/2015/4?lt=1880549
+15 Dec 2015 16:03:31.687 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:03:31.690 :: INFO :: grails.app.services.com.lss.service.LssWsService - ==== time taken: 1089
+15 Dec 2015 16:03:31.692 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to xmpt/status/A082830?years=2014,2015
+15 Dec 2015 16:03:31.874 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:03:31.883 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to pay/ow/A082830
+15 Dec 2015 16:03:32.036 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:03:32.061 :: INFO :: grails.app.services.com.lss.service.WsReqService - making postWsr to xmpt/sync/
+15 Dec 2015 16:03:32.156 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of postWsr
+15 Dec 2015 16:03:53.376 :: INFO :: g.a.c.com.lss.dispatch.DispatchController - User A082830 in.
+15 Dec 2015 16:03:53.378 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to members/findfirm/A082830
+15 Dec 2015 16:03:53.464 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:03:53.556 :: INFO :: grails.app.services.com.lss.service.LssWsService - =4= [referKey:A082830, password:ERNEST, province:ON, city:Ottawa, street:#204  6 Antares Drive, name:Hedges & Sutherland, postCode:K2E 8A9, fax:613-234-0954, email:, enabled:true]
+15 Dec 2015 16:03:53.559 :: INFO :: g.a.c.com.lss.dispatch.DispatchController - == updateResponse: proceed
+15 Dec 2015 16:03:53.561 :: INFO :: g.a.c.com.lss.dispatch.DispatchController - ===============================
+15 Dec 2015 16:03:53.561 :: INFO :: g.a.c.com.lss.dispatch.DispatchController - === firm logging in: A082830 @ Tue Dec 15 16:03:53 EST 2015
+15 Dec 2015 16:03:53.561 :: INFO :: g.a.c.com.lss.dispatch.DispatchController - ===============================
+15 Dec 2015 16:03:53.565 :: INFO :: grails.app.services.com.lss.service.LssWsService - *** updating 2014 - Q1 ***
+15 Dec 2015 16:03:53.565 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to amnd/sync/A082830/2014/1?lt=-1
+15 Dec 2015 16:03:53.704 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:03:53.707 :: INFO :: grails.app.services.com.lss.service.LssWsService - *** updating 2014 - Q2 ***
+15 Dec 2015 16:03:53.707 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to amnd/sync/A082830/2014/2?lt=-1
+15 Dec 2015 16:03:53.853 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:03:53.856 :: INFO :: grails.app.services.com.lss.service.LssWsService - *** updating 2014 - Q3 ***
+15 Dec 2015 16:03:53.856 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to amnd/sync/A082830/2014/3?lt=-1
+15 Dec 2015 16:03:54.000 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:03:54.003 :: INFO :: grails.app.services.com.lss.service.LssWsService - *** updating 2014 - Q4 ***
+15 Dec 2015 16:03:54.003 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to amnd/sync/A082830/2014/4?lt=-1
+15 Dec 2015 16:03:54.146 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:03:54.150 :: INFO :: grails.app.services.com.lss.service.LssWsService - *** updating 2015 - Q1 ***
+15 Dec 2015 16:03:54.151 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to amnd/sync/A082830/2015/1?lt=1880495
+15 Dec 2015 16:03:54.291 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:03:54.294 :: INFO :: grails.app.services.com.lss.service.LssWsService - *** updating 2015 - Q2 ***
+15 Dec 2015 16:03:54.294 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to amnd/sync/A082830/2015/2?lt=1880506
+15 Dec 2015 16:03:54.428 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:03:54.431 :: INFO :: grails.app.services.com.lss.service.LssWsService - *** updating 2015 - Q3 ***
+15 Dec 2015 16:03:54.432 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to amnd/sync/A082830/2015/3?lt=1880548
+15 Dec 2015 16:03:54.561 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:03:54.564 :: INFO :: grails.app.services.com.lss.service.LssWsService - *** updating 2015 - Q4 ***
+15 Dec 2015 16:03:54.564 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to amnd/sync/A082830/2015/4?lt=1880549
+15 Dec 2015 16:03:54.702 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:03:54.705 :: INFO :: grails.app.services.com.lss.service.LssWsService - ==== time taken: 1143
+15 Dec 2015 16:03:54.706 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to xmpt/status/A082830?years=2014,2015
+15 Dec 2015 16:03:54.869 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:03:54.876 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to pay/ow/A082830
+15 Dec 2015 16:03:55.018 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:03:55.042 :: INFO :: grails.app.services.com.lss.service.WsReqService - making postWsr to xmpt/sync/
+15 Dec 2015 16:03:55.137 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of postWsr
+15 Dec 2015 16:04:12.236 :: INFO :: g.a.c.com.lss.dispatch.DispatchController - User A082830 in.
+15 Dec 2015 16:04:12.243 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to members/findfirm/A082830
+15 Dec 2015 16:04:12.338 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:04:12.433 :: INFO :: grails.app.services.com.lss.service.LssWsService - =4= [referKey:A082830, password:ERNEST, province:ON, city:Ottawa, street:#204  6 Antares Drive, name:Hedges & Sutherland, postCode:K2E 8A9, fax:613-234-0954, email:, enabled:true]
+15 Dec 2015 16:04:12.437 :: INFO :: g.a.c.com.lss.dispatch.DispatchController - == updateResponse: proceed
+15 Dec 2015 16:04:12.438 :: INFO :: g.a.c.com.lss.dispatch.DispatchController - ===============================
+15 Dec 2015 16:04:12.438 :: INFO :: g.a.c.com.lss.dispatch.DispatchController - === firm logging in: A082830 @ Tue Dec 15 16:04:12 EST 2015
+15 Dec 2015 16:04:12.438 :: INFO :: g.a.c.com.lss.dispatch.DispatchController - ===============================
+15 Dec 2015 16:04:12.447 :: INFO :: grails.app.services.com.lss.service.LssWsService - *** updating 2014 - Q1 ***
+15 Dec 2015 16:04:12.448 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to amnd/sync/A082830/2014/1?lt=-1
+15 Dec 2015 16:04:12.584 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:04:12.587 :: INFO :: grails.app.services.com.lss.service.LssWsService - *** updating 2014 - Q2 ***
+15 Dec 2015 16:04:12.588 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to amnd/sync/A082830/2014/2?lt=-1
+15 Dec 2015 16:04:12.716 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:04:12.720 :: INFO :: grails.app.services.com.lss.service.LssWsService - *** updating 2014 - Q3 ***
+15 Dec 2015 16:04:12.720 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to amnd/sync/A082830/2014/3?lt=-1
+15 Dec 2015 16:04:12.835 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:04:12.838 :: INFO :: grails.app.services.com.lss.service.LssWsService - *** updating 2014 - Q4 ***
+15 Dec 2015 16:04:12.838 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to amnd/sync/A082830/2014/4?lt=-1
+15 Dec 2015 16:04:12.968 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:04:12.972 :: INFO :: grails.app.services.com.lss.service.LssWsService - *** updating 2015 - Q1 ***
+15 Dec 2015 16:04:12.972 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to amnd/sync/A082830/2015/1?lt=1880495
+15 Dec 2015 16:04:13.117 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:04:13.120 :: INFO :: grails.app.services.com.lss.service.LssWsService - *** updating 2015 - Q2 ***
+15 Dec 2015 16:04:13.120 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to amnd/sync/A082830/2015/2?lt=1880506
+15 Dec 2015 16:04:13.264 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:04:13.267 :: INFO :: grails.app.services.com.lss.service.LssWsService - *** updating 2015 - Q3 ***
+15 Dec 2015 16:04:13.268 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to amnd/sync/A082830/2015/3?lt=1880548
+15 Dec 2015 16:04:13.412 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:04:13.415 :: INFO :: grails.app.services.com.lss.service.LssWsService - *** updating 2015 - Q4 ***
+15 Dec 2015 16:04:13.416 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to amnd/sync/A082830/2015/4?lt=1880549
+15 Dec 2015 16:04:13.560 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:04:13.563 :: INFO :: grails.app.services.com.lss.service.LssWsService - ==== time taken: 1120
+15 Dec 2015 16:04:13.564 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to xmpt/status/A082830?years=2014,2015
+15 Dec 2015 16:04:13.743 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:04:13.750 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to pay/ow/A082830
+15 Dec 2015 16:04:13.897 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:04:13.923 :: INFO :: grails.app.services.com.lss.service.WsReqService - making postWsr to xmpt/sync/
+15 Dec 2015 16:04:14.017 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of postWsr
+15 Dec 2015 16:05:21.485 :: INFO :: g.a.c.com.lss.dispatch.DispatchController - User A082830 in.
+15 Dec 2015 16:05:21.490 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to members/findfirm/A082830
+15 Dec 2015 16:05:21.599 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:05:21.690 :: INFO :: grails.app.services.com.lss.service.LssWsService - =4= [referKey:A082830, password:ERNEST, province:ON, city:Ottawa, street:#204  6 Antares Drive, name:Hedges & Sutherland, postCode:K2E 8A9, fax:613-234-0954, email:, enabled:true]
+15 Dec 2015 16:05:21.692 :: INFO :: g.a.c.com.lss.dispatch.DispatchController - == updateResponse: proceed
+15 Dec 2015 16:05:21.694 :: INFO :: g.a.c.com.lss.dispatch.DispatchController - ===============================
+15 Dec 2015 16:05:21.694 :: INFO :: g.a.c.com.lss.dispatch.DispatchController - === firm logging in: A082830 @ Tue Dec 15 16:05:21 EST 2015
+15 Dec 2015 16:05:21.694 :: INFO :: g.a.c.com.lss.dispatch.DispatchController - ===============================
+15 Dec 2015 16:05:21.702 :: INFO :: grails.app.services.com.lss.service.LssWsService - *** updating 2014 - Q1 ***
+15 Dec 2015 16:05:21.703 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to amnd/sync/A082830/2014/1?lt=-1
+15 Dec 2015 16:05:21.842 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:05:21.845 :: INFO :: grails.app.services.com.lss.service.LssWsService - *** updating 2014 - Q2 ***
+15 Dec 2015 16:05:21.845 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to amnd/sync/A082830/2014/2?lt=-1
+15 Dec 2015 16:05:21.977 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:05:21.980 :: INFO :: grails.app.services.com.lss.service.LssWsService - *** updating 2014 - Q3 ***
+15 Dec 2015 16:05:21.980 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to amnd/sync/A082830/2014/3?lt=-1
+15 Dec 2015 16:05:22.111 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:05:22.114 :: INFO :: grails.app.services.com.lss.service.LssWsService - *** updating 2014 - Q4 ***
+15 Dec 2015 16:05:22.114 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to amnd/sync/A082830/2014/4?lt=-1
+15 Dec 2015 16:05:22.245 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:05:22.249 :: INFO :: grails.app.services.com.lss.service.LssWsService - *** updating 2015 - Q1 ***
+15 Dec 2015 16:05:22.249 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to amnd/sync/A082830/2015/1?lt=1880495
+15 Dec 2015 16:05:22.405 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:05:22.408 :: INFO :: grails.app.services.com.lss.service.LssWsService - *** updating 2015 - Q2 ***
+15 Dec 2015 16:05:22.408 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to amnd/sync/A082830/2015/2?lt=1880506
+15 Dec 2015 16:05:22.568 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:05:22.571 :: INFO :: grails.app.services.com.lss.service.LssWsService - *** updating 2015 - Q3 ***
+15 Dec 2015 16:05:22.571 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to amnd/sync/A082830/2015/3?lt=1880548
+15 Dec 2015 16:05:22.721 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:05:22.724 :: INFO :: grails.app.services.com.lss.service.LssWsService - *** updating 2015 - Q4 ***
+15 Dec 2015 16:05:22.724 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to amnd/sync/A082830/2015/4?lt=1880549
+15 Dec 2015 16:05:22.846 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:05:22.850 :: INFO :: grails.app.services.com.lss.service.LssWsService - ==== time taken: 1151
+15 Dec 2015 16:05:22.851 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to xmpt/status/A082830?years=2014,2015
+15 Dec 2015 16:05:23.021 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:05:23.028 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to pay/ow/A082830
+15 Dec 2015 16:05:23.167 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:05:23.189 :: INFO :: grails.app.services.com.lss.service.WsReqService - making postWsr to xmpt/sync/
+15 Dec 2015 16:05:23.283 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of postWsr
+15 Dec 2015 16:06:30.007 :: INFO :: g.a.c.com.lss.dispatch.DispatchController - User A082830 in.
+15 Dec 2015 16:06:30.009 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to members/findfirm/A082830
+15 Dec 2015 16:06:30.102 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:06:30.198 :: INFO :: grails.app.services.com.lss.service.LssWsService - =4= [referKey:A082830, password:ERNEST, province:ON, city:Ottawa, street:#204  6 Antares Drive, name:Hedges & Sutherland, postCode:K2E 8A9, fax:613-234-0954, email:, enabled:true]
+15 Dec 2015 16:06:30.200 :: INFO :: g.a.c.com.lss.dispatch.DispatchController - == updateResponse: proceed
+15 Dec 2015 16:06:30.201 :: INFO :: g.a.c.com.lss.dispatch.DispatchController - ===============================
+15 Dec 2015 16:06:30.201 :: INFO :: g.a.c.com.lss.dispatch.DispatchController - === firm logging in: A082830 @ Tue Dec 15 16:06:30 EST 2015
+15 Dec 2015 16:06:30.201 :: INFO :: g.a.c.com.lss.dispatch.DispatchController - ===============================
+15 Dec 2015 16:06:30.204 :: INFO :: grails.app.services.com.lss.service.LssWsService - *** updating 2014 - Q1 ***
+15 Dec 2015 16:06:30.205 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to amnd/sync/A082830/2014/1?lt=-1
+15 Dec 2015 16:06:30.334 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:06:30.337 :: INFO :: grails.app.services.com.lss.service.LssWsService - *** updating 2014 - Q2 ***
+15 Dec 2015 16:06:30.337 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to amnd/sync/A082830/2014/2?lt=-1
+15 Dec 2015 16:06:30.451 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:06:30.454 :: INFO :: grails.app.services.com.lss.service.LssWsService - *** updating 2014 - Q3 ***
+15 Dec 2015 16:06:30.454 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to amnd/sync/A082830/2014/3?lt=-1
+15 Dec 2015 16:06:30.578 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:06:30.581 :: INFO :: grails.app.services.com.lss.service.LssWsService - *** updating 2014 - Q4 ***
+15 Dec 2015 16:06:30.581 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to amnd/sync/A082830/2014/4?lt=-1
+15 Dec 2015 16:06:30.708 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:06:30.711 :: INFO :: grails.app.services.com.lss.service.LssWsService - *** updating 2015 - Q1 ***
+15 Dec 2015 16:06:30.712 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to amnd/sync/A082830/2015/1?lt=1880495
+15 Dec 2015 16:06:30.848 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:06:30.851 :: INFO :: grails.app.services.com.lss.service.LssWsService - *** updating 2015 - Q2 ***
+15 Dec 2015 16:06:30.851 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to amnd/sync/A082830/2015/2?lt=1880506
+15 Dec 2015 16:06:30.984 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:06:30.987 :: INFO :: grails.app.services.com.lss.service.LssWsService - *** updating 2015 - Q3 ***
+15 Dec 2015 16:06:30.988 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to amnd/sync/A082830/2015/3?lt=1880548
+15 Dec 2015 16:06:31.134 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:06:31.137 :: INFO :: grails.app.services.com.lss.service.LssWsService - *** updating 2015 - Q4 ***
+15 Dec 2015 16:06:31.137 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to amnd/sync/A082830/2015/4?lt=1880549
+15 Dec 2015 16:06:31.278 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:06:31.280 :: INFO :: grails.app.services.com.lss.service.LssWsService - ==== time taken: 1078
+15 Dec 2015 16:06:31.281 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to xmpt/status/A082830?years=2014,2015
+15 Dec 2015 16:06:31.452 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:06:31.459 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to pay/ow/A082830
+15 Dec 2015 16:06:31.603 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:06:31.625 :: INFO :: grails.app.services.com.lss.service.WsReqService - making postWsr to xmpt/sync/
+15 Dec 2015 16:06:31.741 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of postWsr
+15 Dec 2015 16:07:53.400 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to members/findfirm/A121040
+15 Dec 2015 16:07:53.515 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:07:53.641 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to members/syncnca/A121040
+15 Dec 2015 16:07:54.781 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:07:54.782 :: INFO :: grails.app.services.com.lss.service.LssWsService -  == firm has 26 lawyers
+15 Dec 2015 16:07:54.784 :: INFO :: grails.app.services.com.lss.service.LssWsService -   == adding 1/26 A028957A: 
+15 Dec 2015 16:07:54.796 :: INFO :: grails.app.services.com.lss.service.LssWsService - 
+15 Dec 2015 16:07:54.918 :: INFO :: grails.app.services.com.lss.service.LssWsService -   == adding 2/26 A031299O: 
+15 Dec 2015 16:07:54.919 :: INFO :: grails.app.services.com.lss.service.LssWsService - 
+15 Dec 2015 16:07:55.056 :: INFO :: grails.app.services.com.lss.service.LssWsService -   == adding 3/26 A025862O: 
+15 Dec 2015 16:07:55.063 :: INFO :: grails.app.services.com.lss.service.LssWsService - 
+15 Dec 2015 16:07:55.190 :: INFO :: grails.app.services.com.lss.service.LssWsService -   == adding 4/26 A012938E: 
+15 Dec 2015 16:07:55.191 :: INFO :: grails.app.services.com.lss.service.LssWsService - 
+15 Dec 2015 16:07:55.319 :: INFO :: grails.app.services.com.lss.service.LssWsService -   == adding 5/26 A050335N: 
+15 Dec 2015 16:07:55.325 :: INFO :: grails.app.services.com.lss.service.LssWsService - 
+15 Dec 2015 16:07:55.454 :: INFO :: grails.app.services.com.lss.service.LssWsService -   == adding 6/26 A015669W: 
+15 Dec 2015 16:07:55.461 :: INFO :: grails.app.services.com.lss.service.LssWsService - 
+15 Dec 2015 16:07:55.588 :: INFO :: grails.app.services.com.lss.service.LssWsService -   == adding 7/26 A042376A: 
+15 Dec 2015 16:07:55.595 :: INFO :: grails.app.services.com.lss.service.LssWsService - 
+15 Dec 2015 16:07:55.725 :: INFO :: grails.app.services.com.lss.service.LssWsService -   == adding 8/26 A021600L: 
+15 Dec 2015 16:07:55.731 :: INFO :: grails.app.services.com.lss.service.LssWsService - 
+15 Dec 2015 16:07:55.860 :: INFO :: grails.app.services.com.lss.service.LssWsService -   == adding 9/26 A052760U: 
+15 Dec 2015 16:07:55.867 :: INFO :: grails.app.services.com.lss.service.LssWsService - 
+15 Dec 2015 16:07:55.999 :: INFO :: grails.app.services.com.lss.service.LssWsService -   == adding 10/26 A054223M: 
+15 Dec 2015 16:07:56.000 :: INFO :: grails.app.services.com.lss.service.LssWsService - 
+15 Dec 2015 16:07:56.130 :: INFO :: grails.app.services.com.lss.service.LssWsService -   == adding 11/26 A016698T: 
+15 Dec 2015 16:07:56.136 :: INFO :: grails.app.services.com.lss.service.LssWsService - 
+15 Dec 2015 16:07:56.269 :: INFO :: grails.app.services.com.lss.service.LssWsService -   == adding 12/26 A061567I: 
+15 Dec 2015 16:07:56.274 :: INFO :: grails.app.services.com.lss.service.LssWsService - 
+15 Dec 2015 16:07:56.410 :: INFO :: grails.app.services.com.lss.service.LssWsService -   == adding 13/26 A062784W: 
+15 Dec 2015 16:07:56.412 :: INFO :: grails.app.services.com.lss.service.LssWsService - 
+15 Dec 2015 16:07:56.545 :: INFO :: grails.app.services.com.lss.service.LssWsService -   == adding 14/26 A047313L: 
+15 Dec 2015 16:07:56.546 :: INFO :: grails.app.services.com.lss.service.LssWsService - 
+15 Dec 2015 16:07:56.679 :: INFO :: grails.app.services.com.lss.service.LssWsService -   == adding 15/26 A028487J: 
+15 Dec 2015 16:07:56.684 :: INFO :: grails.app.services.com.lss.service.LssWsService - 
+15 Dec 2015 16:07:56.818 :: INFO :: grails.app.services.com.lss.service.LssWsService -   == adding 16/26 A060670J: 
+15 Dec 2015 16:07:56.823 :: INFO :: grails.app.services.com.lss.service.LssWsService - 
+15 Dec 2015 16:07:56.846 :: INFO :: grails.app.services.com.lss.service.LssWsService -   == adding 17/26 A034366V: 
+15 Dec 2015 16:07:56.851 :: INFO :: grails.app.services.com.lss.service.LssWsService - 
+15 Dec 2015 16:07:56.976 :: INFO :: grails.app.services.com.lss.service.LssWsService -   == adding 18/26 A041485A: 
+15 Dec 2015 16:07:56.980 :: INFO :: grails.app.services.com.lss.service.LssWsService - 
+15 Dec 2015 16:07:57.117 :: INFO :: grails.app.services.com.lss.service.LssWsService -   == adding 19/26 A021015W: 
+15 Dec 2015 16:07:57.122 :: INFO :: grails.app.services.com.lss.service.LssWsService - 
+15 Dec 2015 16:07:57.253 :: INFO :: grails.app.services.com.lss.service.LssWsService -   == adding 20/26 A011982K: 
+15 Dec 2015 16:07:57.258 :: INFO :: grails.app.services.com.lss.service.LssWsService - 
+15 Dec 2015 16:07:57.399 :: INFO :: grails.app.services.com.lss.service.LssWsService -   == adding 21/26 A051129L: 
+15 Dec 2015 16:07:57.404 :: INFO :: grails.app.services.com.lss.service.LssWsService - 
+15 Dec 2015 16:07:57.538 :: INFO :: grails.app.services.com.lss.service.LssWsService -   == adding 22/26 A026954N: 
+15 Dec 2015 16:07:57.543 :: INFO :: grails.app.services.com.lss.service.LssWsService - 
+15 Dec 2015 16:07:57.679 :: INFO :: grails.app.services.com.lss.service.LssWsService -   == adding 23/26 A029661N: 
+15 Dec 2015 16:07:57.684 :: INFO :: grails.app.services.com.lss.service.LssWsService - 
+15 Dec 2015 16:07:57.827 :: INFO :: grails.app.services.com.lss.service.LssWsService -   == adding 24/26 A029100L: 
+15 Dec 2015 16:07:57.832 :: INFO :: grails.app.services.com.lss.service.LssWsService - 
+15 Dec 2015 16:07:57.971 :: INFO :: grails.app.services.com.lss.service.LssWsService -   == adding 25/26 A066397T: 
+15 Dec 2015 16:07:57.974 :: INFO :: grails.app.services.com.lss.service.LssWsService - 
+15 Dec 2015 16:07:58.120 :: INFO :: grails.app.services.com.lss.service.LssWsService -   == adding 26/26 A015020E: 
+15 Dec 2015 16:07:58.123 :: INFO :: grails.app.services.com.lss.service.LssWsService - 
+15 Dec 2015 16:07:58.123 :: INFO :: grails.app.services.com.lss.service.LssWsService - ==== time taken: 3341
+15 Dec 2015 16:08:11.275 :: INFO :: g.a.c.com.lss.dispatch.DispatchController - User A121040 in.
+15 Dec 2015 16:08:11.276 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to members/findfirm/A121040
+15 Dec 2015 16:08:11.372 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:08:11.467 :: INFO :: grails.app.services.com.lss.service.LssWsService - =4= [referKey:A121040, password:A121040lss, province:ON, city:Toronto, street:#800  150 York St, name:MacDonald Sager Manis LLP, postCode:M5H 3S5, fax:416-364-1453, email:ssager@msmlaw.ca, enabled:true]
+15 Dec 2015 16:08:11.468 :: INFO :: g.a.c.com.lss.dispatch.DispatchController - == updateResponse: proceed
+15 Dec 2015 16:08:11.470 :: INFO :: g.a.c.com.lss.dispatch.DispatchController - ===============================
+15 Dec 2015 16:08:11.470 :: INFO :: g.a.c.com.lss.dispatch.DispatchController - === firm logging in: A121040 @ Tue Dec 15 16:08:11 EST 2015
+15 Dec 2015 16:08:11.470 :: INFO :: g.a.c.com.lss.dispatch.DispatchController - ===============================
+15 Dec 2015 16:08:11.474 :: INFO :: grails.app.services.com.lss.service.LssWsService - *** updating 2014 - Q1 ***
+15 Dec 2015 16:08:11.474 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to amnd/sync/A121040/2014/1?lt=-1
+15 Dec 2015 16:08:11.618 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:08:11.621 :: INFO :: grails.app.services.com.lss.service.LssWsService - *** updating 2014 - Q2 ***
+15 Dec 2015 16:08:11.621 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to amnd/sync/A121040/2014/2?lt=-1
+15 Dec 2015 16:08:11.758 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:08:11.760 :: INFO :: grails.app.services.com.lss.service.LssWsService - *** updating 2014 - Q3 ***
+15 Dec 2015 16:08:11.761 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to amnd/sync/A121040/2014/3?lt=-1
+15 Dec 2015 16:08:11.902 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:08:11.904 :: INFO :: grails.app.services.com.lss.service.LssWsService - *** updating 2014 - Q4 ***
+15 Dec 2015 16:08:11.904 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to amnd/sync/A121040/2014/4?lt=-1
+15 Dec 2015 16:08:12.040 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:08:12.044 :: INFO :: grails.app.services.com.lss.service.LssWsService - *** updating 2015 - Q1 ***
+15 Dec 2015 16:08:12.044 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to amnd/sync/A121040/2015/1?lt=-1
+15 Dec 2015 16:08:12.177 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:08:12.179 :: INFO :: grails.app.services.com.lss.service.LssWsService - *** updating 2015 - Q2 ***
+15 Dec 2015 16:08:12.179 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to amnd/sync/A121040/2015/2?lt=-1
+15 Dec 2015 16:08:12.323 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:08:12.326 :: INFO :: grails.app.services.com.lss.service.LssWsService - *** updating 2015 - Q3 ***
+15 Dec 2015 16:08:12.326 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to amnd/sync/A121040/2015/3?lt=-1
+15 Dec 2015 16:08:12.464 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:08:12.466 :: INFO :: grails.app.services.com.lss.service.LssWsService - *** updating 2015 - Q4 ***
+15 Dec 2015 16:08:12.467 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to amnd/sync/A121040/2015/4?lt=-1
+15 Dec 2015 16:08:12.598 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:08:12.601 :: INFO :: grails.app.services.com.lss.service.LssWsService - ==== time taken: 1130
+15 Dec 2015 16:08:12.602 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to xmpt/status/A121040?years=2014,2015
+15 Dec 2015 16:08:12.768 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:08:12.774 :: INFO :: grails.app.services.com.lss.service.WsReqService - making getWsr to pay/ow/A121040
+15 Dec 2015 16:08:12.903 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of getWsr
+15 Dec 2015 16:08:12.943 :: INFO :: grails.app.services.com.lss.service.WsReqService - making postWsr to xmpt/sync/
+15 Dec 2015 16:08:13.071 :: INFO :: grails.app.services.com.lss.service.WsReqService -   out of postWsr

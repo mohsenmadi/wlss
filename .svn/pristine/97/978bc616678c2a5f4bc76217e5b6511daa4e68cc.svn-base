@@ -1,0 +1,69 @@
+{
+  "exemptYrs": [
+    {
+      "fy": "2015",
+      "lawyersStats": [
+        {
+          "referKey": "A028957A",
+          "exemptCl": true,
+          "exemptRe": true
+        },
+        {
+          "referKey": "A031299O",
+          "exemptCl": true,
+          "exemptRe": true
+        },
+        {
+          "referKey": "A034366V",
+          "exemptCl": false,
+          "exemptRe": false
+        },
+        {
+          "referKey": "A056129U",
+          "exemptCl": false,
+          "exemptRe": false
+        },
+        {
+          "referKey": "A026954N",
+          "exemptCl": false,
+          "exemptRe": false
+        }
+      ]
+    },
+    {
+      "fy": "2014",
+      "lawyersStats": [
+        {
+          "referKey": "A034366V",
+          "exemptCl": false,
+          "exemptRe": false
+        },
+        {
+          "referKey": "A028957A",
+          "exemptCl": false,
+          "exemptRe": false
+        },
+        {
+          "referKey": "A031299O",
+          "exemptCl": false,
+          "exemptRe": false
+        },
+        {
+          "referKey": "A025862O",
+          "exemptCl": false,
+          "exemptRe": false
+        },
+        {
+          "referKey": "A026954N",
+          "exemptCl": false,
+          "exemptRe": false
+        },
+        {
+          "referKey": "A015669W",
+          "exemptCl": false,
+          "exemptRe": false
+        }
+      ]
+    }
+  ]
+}

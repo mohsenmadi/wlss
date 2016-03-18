@@ -1,0 +1,252 @@
+package com.lss.service
+
+import grails.transaction.Transactional
+import groovy.json.JsonBuilder
+
+import grails.util.Holders
+
+import com.lss.filing.*
+import com.lss.payment.PayCharge
+import com.lss.enums.ActivityType
+
+
+@Transactional
+class PaymentService {
+    def wsPayMethodUrl   = "members/methods/" //GET saved Payment Preferences
+    def wsPostPayUrl     = "pay/ps"
+    def wsGetBankInstUrl = "pay/fin"
+    def wsPayOwingUrl    = "pay/ow"   //	http://giza:8080/lss-ds/ds/pay/ow/A121040
+	 
+    def liuService
+	 def wsReqService
+
+    def feeMap = [CL: 50, RE: 65, REO: 50]
+
+    def getPaymentPreferences(payMethod, user) {
+        def json = wsReqService.makeGetWsr(wsPayMethodUrl + user)
+
+        json.methods.find {
+            if (it.type == "${payMethod}" && it.preferred == true) {
+                return it
+            }
+        }
+    }
+
+    def getBankInst() {
+        def json = wsReqService.makeGetWsr(wsGetBankInstUrl)
+//        println json
+        def inst = [:]
+        json.institutions.each {
+            inst.put(it.id, it.name)
+        }
+        inst
+    }
+
+
+    def calcTotal(cl, re, reo) {
+//		println "cl:${cl},re:${re},reo:${reo}"
+        def tCl = cl ?: 0
+        def tReo = reo ?: 0
+        def tRe = re ?: 0
+
+        def costCl = tCl * feeMap.CL
+        def costRe = tRe * feeMap.RE
+        def costReo = tReo * feeMap.REO
+        def totCost = costCl + costRe + costReo
+        return totCost
+    }
+
+
+    def calcTotal4status(cl, re, reo, activityType) {
+        def totCost
+
+        if (activityType == ActivityType.CL) {
+            def tCl = cl ?: 0
+            def costCl = tCl * feeMap.CL
+            totCost = costCl
+
+        } else {
+
+            def tReo = reo ?: 0
+            def tRe = re ?: 0
+            def costRe = tRe * feeMap.RE
+            def costReo = tReo * feeMap.REO
+            totCost = costRe + costReo
+        }
+
+        totCost
+    }
+
+
+    def findAmendsToPay(filingKeys) {
+        def user = liuService.user
+
+        def pAmends = [:]
+        filingKeys.each { f ->
+            def a = f.split("~")
+            def amend = Amendment.get(a[0])
+            if (amend) {
+//				def tAmt = paymentService.calcTotal(amend.cl,amend.re, amend.reo)
+                pAmends.put(amend.id, [
+                        filingId: amend.filing.id,
+//					referKey:"${liuService.isLawyerOnly()?liuService.user.username:liuService.user.firm.referKey}",
+                        referKey: "${liuService.username}",
+                        fy      : amend.filing.filingYear.year,
+                        qtr     : amend.filing.quarter,
+                        cl      : amend.cl,
+                        re      : amend.re,
+                        reo     : amend.reo,
+                        totAmt  : a[1],
+                        paid    : 0,              //f.paid,
+                        due     : 0                  //dueAmt
+                ])
+            }
+        } //end of filingKeys each
+        pAmends
+    }
+
+    def updatePayment(amendsToPay, pay, payStatus, payAuth, confno) {
+//		println 'valid payment'
+        pay.payId = confno
+        pay.payStatus = 1
+        pay.save(failOnError: true)
+
+        amendsToPay.each { k, v ->
+            def amend = Amendment.get(k)
+            if (amend) {
+                amend.payment = pay
+                amend.save(failOnError: true)
+            }
+        }
+    }
+
+
+    def savePayment(amendsToPay, payment, payType) {
+        def json = constructJson(amendsToPay, payment, payType)
+		println "json for payment...${json}"
+        def resp = wsReqService.makePostWsr(wsPostPayUrl, json.toString())
+
+        resp
+    }
+
+
+    def constructJson(amendsToPay, payment, payType) {
+
+        def builder = new JsonBuilder()
+        builder.ggPayment {
+            username "${liuService.user.username}"
+            referKey "${payment.referKey}"
+            confirmation "${payment.payId}"
+            payMethod {
+                "preferred" "${payType == "CHEQUE" ? '' : payment.saveInfo == "0" ? false : true}"
+                "type" payType
+                "field1" "${payType == "CC" ? payment.ccType : payType == "EFT" ? payment.instNo : ''}"
+                "field2" "${payType == "CC" ? payment.ccNo : payType == "EFT" ? payment.accNo : ''}"
+                "field3" "${payType == "CC" ? payment.expiryDate : payType == "EFT" ? payment.transitNo : ''}"
+                "name" "${payType == "CHEQUE" ? '' : payment.nameOnCard}"
+            }
+            totalAmount "${payment.amt}"
+            qtrs(amendsToPay.collect { k, v ->
+                [
+                        amount: v.totAmt,
+                        yr    : v.fy,
+                        qtr   : v.qtr.substring(1)
+                ]
+            })
+        }
+        builder
+    }
+
+    def generatePayKey() {
+        def today = new Date().format('dMyyyyhhmmss')
+        def tempKey = 'P'
+        tempKey <<= today                 //.toString().replaceAll('-' , '')
+//		println "payment referKey....${tempKey}"
+        return tempKey
+    }
+
+    def updateOwing() {
+        setPayCharges()
+        def filingService = Holders.grailsApplication.mainContext.filingService
+        def refer = liuService.isLawyerOnly() ? liuService.user : liuService.firm
+
+        def json = wsReqService.makeGetWsr(wsPayOwingUrl + "/" + liuService.username)
+//		println json
+        if (json) {
+            refer.filingYears.filings*.each { filing ->
+                if (filingService.isQrEnabled(filing)) {
+
+                    updateOutstandingAmts(filing, json.owed)
+                }//isQrEnabled
+            }//filings*.each
+
+            // TODO update charges
+            updateCharges(json.charges, refer)
+//			updateChargesTBD(json.charges,refer)
+
+        } //json
+
+    }
+
+    def updateOutstandingAmts(filing, json) {
+//		println "${filing.filingYear.year}...${filing.quarter.drop(1).take(1)}"
+        def result = json.find { it.fy == filing.filingYear.year && it.fq == filing.quarter.drop(1).take(1) }
+        if (result) {
+            filing.owingCl = result.cl
+            filing.owingRe = result.re
+        } else {
+            filing.owingCl = 0
+            filing.owingRe = 0
+        }
+        filing.save(failOnError: true)
+
+    }
+
+    def updateCharges(json, refer) {
+        json.each {
+            def payCharge = PayCharge.findByType(it.type) ?: new PayCharge()
+//			println "payCharge....${payCharge}"
+            if (payCharge.amt != it.amount) {
+                payCharge.type = it.type
+                payCharge.amt = it.amount
+                payCharge.save(failOnError: true)
+                refer.addToPayCharges(payCharge)
+            }
+        }
+    }
+
+
+    def updateChargesTBD(json, refer) {
+
+        def payCharge = new PayCharge()
+//			println "payCharge....${payCharge}"
+        payCharge.type = "NSF"//it.type
+        payCharge.amt = 25//it.amount
+        payCharge.save(failOnError: true)
+        refer.addToPayCharges(payCharge)
+    }
+
+
+    def getPayCharges() {
+        def chrgs = liuService.getFirm().payCharges
+        def chrg = 0
+        chrgs.each {
+//			println it.type
+            chrg = it.type == "NSF" ? it.amt : 0
+        }
+
+        chrg
+    }
+
+    def setPayCharges() {
+        def chrgs = liuService.getFirm().payCharges
+        def chrg = 0
+        chrgs.each { pc ->
+            //			println it.type
+            if (pc.type == "NSF") {
+                pc.amt = 0
+                pc.save(failOnError: true)
+            }
+        }
+    }
+}

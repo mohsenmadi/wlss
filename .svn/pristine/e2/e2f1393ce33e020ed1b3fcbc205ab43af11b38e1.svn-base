@@ -1,0 +1,10 @@
+<g:set var="liuService" bean="liuService"/>
+
+<g:if test="${liuService.liUserIsFin()}">
+   <div style="height: 10px"></div>
+   <g:textArea id="textAreaFin" name="txtareaBy"
+               value="By ${liuService.liUser.firstName} for ${liuService.username}:"
+               style="height:28px" readonly="readonly"/>
+   <g:textArea id="textAreaFin" name="txtareaReason" maxlength="106"
+               placeholder="Provide a short reason. Text above is included for you."/>
+</g:if>

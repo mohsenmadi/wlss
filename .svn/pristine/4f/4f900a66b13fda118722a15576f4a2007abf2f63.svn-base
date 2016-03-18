@@ -1,0 +1,9 @@
+<!-- refresh should stay on same page -->
+<a href="/dispatch/reloadDataForPage" style="display:none;" title="Reload & go to homepage">
+	<span class="glyphicon glyphicon-refresh iconInfo"></span>
+</a>
+
+<g:link controller="dispatch" action="reloadDataForPage"
+		params="[targetUri: (request.forwardURI - request.contextPath),id:params.id]"
+		style="display:inline-block;">
+reload</g:link>

@@ -1,0 +1,65 @@
+<!-- Credit Card payments -->
+
+<div id="payCC" >
+	<div class="row"><div class="col-sm-12" style="height:10px"> </div>	</div>	
+	<div class="row">
+		<div class="col-sm-12" style="text-align: center;"> <span style="color: #20495e;"><strong>Credit Card Details</strong></span> </div>
+	</div>
+	<div class="row"><div class="col-sm-12" style="height:10px"> </div>	</div>	
+	<div class="row">
+		<div class="col-sm-4" style="text-align: right;color: #20495e;">Name:</div>
+		<div class="col-sm-7">
+			<g:textField id="ccName" name="ccName"				
+				value="${payPref?.name}" 
+				placeholder="Name as it appears on card"  size="45"/>
+		 </div>	
+	</div> <!-- name Row -->
+	<div class="row"><div class="col-sm-12" style="height:10px"> </div>	</div>	
+	<div class="row">
+		<div class="col-sm-4" style="text-align: right;color: #20495e;">Type: </div>
+		<div class="col-sm-7">
+			<g:select id="ccType" name="ccType"  from="${["Amex", "MasterCard", "Visa"]}" value="${payPref?.field1}" 
+				placeholder="Select card type"></g:select>
+		</div>	
+	</div> <!-- type Row -->
+	<div class="row"><div class="col-sm-12" style="height:10px"> </div>	</div>	
+	<div class="row">
+		<div class="col-sm-4" style="text-align: right;color: #20495e;">Number: </div>
+		<div class="col-sm-7">
+				<g:field  type="text" name="ccNo" maxlength="18" value="${payPref?.field2}" 
+					placeholder="# without spaces" size="18" onkeypress="return isNumberKey(event)"/> 
+		</div>	
+	</div> <!-- number Row -->
+	
+	<div class="row"><div class="col-sm-12" style="height:10px"> </div>	</div>	
+	<div class="row">
+		<div class="col-sm-4" style="text-align: right;color: #20495e;">Expiry Date: </div>
+		<div class="col-sm-7">
+			<g:hiddenField id="expiryDate" name="expiryDate" value="${payPref?.field3}" placeholder="mm/yy" size="5" maxlength="5"/>
+			
+			<g:set var="today" value="${new Date()}"/>
+			<g:set var="dt" value="${payPref?.field3}"/>			
+			<g:select id="mm" name="mm" from="${01..12}" value="${(dt!= null)?dt.split('/')[0]:''}"  
+						noSelection="${['none':'']}" onChange="updateExpDate()"/> /
+			<g:select id = "yy" name="yy" from="${today[Calendar.YEAR]..today[Calendar.YEAR]+10}" 
+						value="${(dt!= null)? 20+dt.split('/')[1]:''}"
+			 			noSelection="${['none':'']}" onChange="updateExpDate()" />
+		</div>	
+	</div><!-- expiry date Row -->
+	<div class="row"><div class="col-sm-12" style="height:10px"> </div>	</div>	
+	<div class="row">		
+		<div class="col-sm-1"></div>
+		<div class="col-sm-11"><p>
+			<g:checkBox id="cSaveInfo" name="cSaveInfo" checked="${payPref?.preferred}" />&nbsp;
+			Remember my payment information for future Transaction Levy	Surcharge filings.</p>				
+		</div>		
+	</div>	
+</div>
+
+				
+
+
+
+
+
+

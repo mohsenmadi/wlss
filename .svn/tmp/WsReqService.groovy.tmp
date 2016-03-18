@@ -1,0 +1,57 @@
+package com.lss.service
+
+import com.lss.ws.WsHeader
+import grails.plugins.rest.client.RestBuilder
+import groovy.json.JsonBuilder
+import groovy.json.JsonOutput
+import org.springframework.http.MediaType
+
+class WsReqService {
+
+	String wsUrl
+	def mapHeader = ["X-LSS-Env":"devmo"]
+//	def mapHeader = ["X-LSS-Env":"uatest"]
+	def mapParams = [headers:mapHeader,	connectTimeout:10000, readTimeout:20000]
+
+	def makeGetWsr(serviceUrl) {
+		def timeTaken = System.currentTimeMillis()
+		def rest = new RestBuilder(mapParams)
+		rest.set
+		def response = rest.get("$wsUrl/$serviceUrl") {
+			accept "application/json"
+			header 'X-LSS-Env': 'test'
+		}
+		// "
+
+		response.json
+	}
+
+	def makePostWsr(serviceUrl, jsonBuilder) {
+
+		def rest2 = new RestBuilder(
+				connectTimeout:10000,
+				readTimeout:20000)
+
+		def jsonBuilder2 = new JsonBuilder()
+		jsonBuilder2 {
+			tempfield "some Field"
+		}
+		def response = rest2.post("http://giza:8080/sbx-ds/sb/sbr/na", WsHeader.getRestBuilderClosure()) {
+			accept "application/json"
+			json jsonBuilder2.toString()
+		}
+		println "== $response.json"
+
+
+
+		def timeTaken = System.currentTimeMillis()
+		def rest = new RestBuilder(headers:["X-LSS-Env":"devmo"],connectTimeout:10000,readTimeout:20000)
+		response = rest.post("$wsUrl/$serviceUrl") {
+			accept "application/json"
+			contentType "application/json"
+			json jsonBuilder
+			header 'X-LSS-Env','test'
+		}
+		response.json
+	}
+}

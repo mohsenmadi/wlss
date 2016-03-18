@@ -1,0 +1,400 @@
+package com.lss.filing
+
+import grails.plugin.cache.Cacheable
+
+import javax.transaction.Transactional
+
+import com.lss.client.Firm
+import com.lss.client.Role
+import com.lss.client.User
+import com.lss.client.UserRole
+import com.lss.common.Notification
+import com.lss.service.LiuService
+import com.lss.enums.ActivityOwner
+import com.lss.filing.Amendment
+import com.lss.filing.Filing
+import com.lss.filing.FilingYear
+import com.lss.filing.MemberActivity
+
+class FilingController{
+
+	def lssWsService
+	def liuService
+	def filingService
+	def commonService
+		
+	def filing
+	def filingYear
+	def lastAmnd
+	def exDisplayYear
+	def exFyIdx
+	def exFy
+	def setSearchMembers = [] as HashSet
+	def mapMovedMembers = [:]
+	
+	@Transactional
+	def addAmendment() {
+		
+		def createAmendment = true
+		def newAmnd
+		def amnds = filing.amendments
+		def addBtnVal = 'submit'
+		def msgCode
+						
+		if (params.submitBtnAction != 'submit') {
+			newAmnd = lastAmnd
+			markRead()
+						
+		} else {
+
+			newAmnd = new Amendment(cl:params.cl, re:params.re, reo:params.reo)
+			createMemberActivities(newAmnd, params)
+			
+			if (newAmndIsSame(newAmnd)) {
+				msgCode = -1
+				
+			} else {
+				(newAmnd, filing) = lssWsService.submitAmendment(
+						filing, lastAmnd,	newAmnd,	mapMovedMembers, setSearchMembers)
+				
+				lssWsService.updateOutstanding()
+
+				lastAmnd = newAmnd
+				createAmendment = false
+				addBtnVal = 'amend'
+				mapMovedMembers.clear()
+				setSearchMembers.clear()
+			}
+		}
+		
+		def lastNtfy = liuService.notifications[-1] 
+		msgCode = msgCode ?: lastNtfy.freshlyAdded ? lastNtfy.code : 0
+		def listMembers = getMemActivityList(newAmnd)
+																		
+		render (template:'amendment',
+			model:[createAmendment:createAmendment,
+					msgCode:msgCode, displayYear:filing.filingYear.year,
+					addBtnVal:addBtnVal, setSearchMembers:setSearchMembers,
+					filing:filing, amendment:newAmnd, listMembers:listMembers])
+	}
+	
+	def newAmndIsSame(newAmnd) {
+		def oldMas = lastAmnd.memActivities
+		def newMas = newAmnd.memActivities
+
+		if (newAmnd.cl != lastAmnd.cl || newAmnd.re != lastAmnd.re ||
+			newAmnd.reo != lastAmnd.reo || newMas.size() != oldMas.size()) {
+			
+			return false
+		}
+					
+		oldMas = oldMas.collectEntries {	[it.member.username, [it.activeCl, it.activeRe]] }.sort { it.key }
+		newMas = newMas.collectEntries {	[it.member.username, [it.activeCl, it.activeRe]] }.sort { it.key }
+		
+		oldMas == newMas
+	}
+	
+	def getMemActivityList(amnd) {
+		(amnd.memActivities as List).sort{ it.member.username }
+	}
+	
+	def prepareAmndMemActivities(amnd) {
+		def usernameSet = amnd.memActivities.member.username.sort { it }
+		
+		// TODO more testing, scenario:
+		//  - A004310 adds new members that belonged to A121040
+		//  - A121040 sees that members with wavinghand - good
+		//  - A121040 goes for new amnd, A121040 sees both, member and member~... (fix if exists)
+		
+//		println "=1= $usernameSet"
+//		println "=2= ${liuService.firmLawyers.username.sort { it }}"
+		
+		liuService.firmLawyers.each {
+			if (!usernameSet.contains(it.username)) {
+				amnd.addToMemActivities(
+						new MemberActivity(
+						activeCl:false,
+						activeRe:false,
+						activityOwner:ActivityOwner.FIRM,
+						amendment:amnd,
+						member:it))
+			}
+		}
+		amnd
+	}
+	
+	def createMemberActivities(amnd, params) {
+		
+		def activityOwner = liuService.activityOwner
+				
+		def memberActivityMap = lastAmnd.memActivities.collectEntries { member ->
+			[member.member.username, new MemberActivity(
+				activityOwner:activityOwner,
+				amendment:amnd,
+				member:member.member)]
+		}
+				
+		setSearchMembers.each {
+			memberActivityMap[it.username] =  new MemberActivity(
+					activityOwner:activityOwner,
+					amendment:amnd,
+					member:it)
+		}
+		
+		params.each { k, v ->
+			if (v && k.startsWith("active")) {
+				def tokens = k.split("-")
+				if (tokens[1].equals('cl')) {
+					memberActivityMap[tokens[2]]?.setActiveCl(true)
+				} else {
+					memberActivityMap[tokens[2]]?.setActiveRe(true)
+				}
+			}
+		}
+		
+		amnd.memActivities = new HashSet()
+										
+		memberActivityMap.each () { k, v ->
+			amnd.addToMemActivities(
+					new MemberActivity(
+					activeCl:v.activeCl,
+					activeRe:v.activeRe,
+					activityOwner:activityOwner,
+					amendment:amnd,
+					member:v.member))
+		}
+	}		
+	
+	def addMember() {
+
+		def registeredMembers = params.id == 'pageAmend' ?
+				lastAmnd.memActivities.collect { it.member } :
+				getExListMembers(params.id.split('-')[1] as int)
+
+		def username = params.searchMemKey.trim().toUpperCase()
+		def searchMember = search4Member(setSearchMembers, username) || 
+													search4Member( registeredMembers, username)
+		
+		def msg2user = ""
+		
+		if (!username.isEmpty() && !searchMember) {
+
+			searchMember = lssWsService.getSearchMember(username, liuService.firm)
+			if (searchMember) {
+				def movedMember = User.findByUsername(username)
+				def movedMembers = User.findAllByUsernameIlike(username + '~%')
+				if (movedMember) {
+					movedMembers.add(movedMember)
+				}
+				def size = movedMembers.size()
+				if (size) {
+					mapMovedMembers[movedMember] = [archiveUsername:(movedMember.username + '~' + size), oldUsername:username]
+				}
+				
+				searchMember.setFreshlyAdded(true)
+				setSearchMembers.add(searchMember)
+				msg2user = "member found-#00bb00"
+			} else {
+				msg2user = "member not found-#dd0000"
+			}
+		} else {
+			msg2user = username.isEmpty() ? "" : "member already listed-#dd0000"
+		}
+		render(template:'addMemberTable', model:[setSearchMembers:setSearchMembers, msg2user:msg2user])		
+	}
+	
+	def deleteMember() {
+		def mem2unadd = mapMovedMembers.find { it.value.oldUsername == params.id }
+		mapMovedMembers.remove(mem2unadd?.key)		
+		
+		setSearchMembers.remove(search4Member(setSearchMembers, params.id))
+		def msg2user = "member deleted-#00bb00"
+		render(template:'addMemberTable', model:[setSearchMembers:setSearchMembers, msg2user:msg2user])
+	}
+	
+	def search4Member(memberSearchSet, username) {
+		def member = memberSearchSet.findResult {
+			if (it.username.substring(0,8) == username) {
+				return it
+			}
+		}
+		return member
+	}
+
+	def refreshQrTemp() {
+		render (template:'qrSummary', model:[filing:Filing.get(filing.id)])
+	}
+	
+	def rerenderQuarter() {		
+		mapMovedMembers.clear()
+		setSearchMembers.clear()
+		def listMembers = getMemActivityList(Amendment.get(lastAmnd.id))
+						
+		render (template:'amendment',
+			model:[createAmendment:false, firm:liuService.firm,
+					addBtnVal:fileOrAmend(), displayYear:filing.filingYear.year,
+					setSearchMembers:setSearchMembers, listMembers:listMembers,
+					filing:filing, amendment:Amendment.get(lastAmnd.id)])
+	}
+
+	def refreshExTemp() {
+		render (template:'exSummary', model:[exFy:exFy])
+	}
+
+	def getExListMembers(year) {
+		def exListMembers = year == Calendar.instance[Calendar.YEAR] ?
+				liuService.lawyersYcurr : liuService.lawyersYprev
+		exListMembers.sort{ it.username }
+	}
+	
+	def rerenderExemption() {
+		render (template:'exemptionsTemplate',
+			model:[addBtnVal:'file', finCustRole:liuService.liUserIsFinOrCustSrv(),
+				listMembers:getExListMembers(exDisplayYear), displayYear:exDisplayYear])
+	}
+	
+	def exemptions() {
+		exDisplayYear = params.id as int
+		exFyIdx = commonService.getYearIdx(exDisplayYear)
+		exFy = liuService.filingYears[exFyIdx]
+
+		[addBtnVal:'file', finCustRole:liuService.liUserIsFinOrCustSrv(), exFy:exFy,
+			listMembers:getExListMembers(exDisplayYear), displayYear:exDisplayYear]
+	}
+	
+	def fileExemption() {
+		def createAmendment = true
+		def addBtnVal = 'submit'
+						
+		if (params.submitBtnAction == 'submit') {
+		
+			def mapExempt = createNewExemptions()
+			
+			def (isAccepted, exConfNum) = lssWsService.submitExemptFiling(mapExempt, exDisplayYear,
+					mapMovedMembers, setSearchMembers)
+			
+			if (isAccepted) {
+
+				def activityOwner = liuService.activityOwner
+				def amnd = filingService.getLastAmendment(liuService.firm, exFyIdx)
+
+				setSearchMembers.each {
+					amnd.addToMemActivities(
+							new MemberActivity(
+									activityOwner: activityOwner,
+									amendment: amnd,
+									member: it))
+				}
+
+				exFy = FilingYear.get(exFy.id)
+				exFy.exConfNum = exConfNum
+				exFy.exConfDate = new Date()
+
+				mapExempt.each { k, v ->
+					def exs = User.findByUsername(k).exempts[exFyIdx]
+					exs.exCl = v.exCl
+					exs.exRe = v.exRe
+				}
+
+				mapMovedMembers.clear()
+				setSearchMembers.clear()
+			}
+			
+			createAmendment = false
+			addBtnVal = 'file'
+		}
+
+		render (template:'exemptionsTemplate',
+			model:[createAmendment:createAmendment,
+					displayYear:exDisplayYear, finCustRole:liuService.liUserIsFinOrCustSrv(),
+					addBtnVal:addBtnVal, msgCode:0,
+					listMembers:getExListMembers(exDisplayYear)])
+	}
+	
+	def createNewExemptions() {
+
+		def exListMembers = getExListMembers(exDisplayYear)
+		
+		def mapExemptOrig = exListMembers.collectEntries { member ->
+			[member.username, 
+				['exCl':member.exempts[exFyIdx].exCl, 'exRe':member.exempts[exFyIdx].exRe]]
+		}
+		
+		def mapExemptNew = exListMembers.collectEntries { member ->
+			[member.username, ['exCl':false, 'exRe':false]]
+		}
+
+		setSearchMembers.each {
+			mapExemptOrig[it.username] = ['exCl':false, 'exRe':false]
+			mapExemptNew[it.username] = ['exCl':false, 'exRe':false]
+		}
+
+		params.each { k, v ->
+			if (v && k.startsWith("active")) {
+
+				def tokens = k.split("-")
+				def username = tokens[2]
+
+				if (tokens[1].equals('cl')) {
+					mapExemptNew[username].exCl = true
+				} else {
+					mapExemptNew[username].exRe = true
+				}
+			}
+		}
+		
+		def mapDiff
+		
+		if (liuService.liUserIsFinOrCustSrv()) {
+			mapDiff = mapExemptNew.findAll {
+				it.value != mapExemptOrig[it.key]
+			}
+		} else { // have to do this because disabled fields don't make it here
+			mapDiff = mapExemptNew.findAll {
+				(it.value.exCl && !mapExemptOrig[it.key].exCl) ||
+				(it.value.exRe && !mapExemptOrig[it.key].exRe)
+			}
+			mapExemptOrig.each { k, v ->
+				if (v.exCl) mapDiff[k]?.exCl = true
+				if (v.exRe) mapDiff[k]?.exRe = true
+			}
+		}
+		
+		mapDiff
+	}
+	
+	// second entry point - called from summary; necessary inits take place
+	def quarter() {	
+		filing = Filing.get(params.id)
+		lastAmnd = filingService.getLastAmendment(filing)
+		[filing:filing, addBtnVal:fileOrAmend(), amendment:lastAmnd,
+			listMembers:getMemActivityList(lastAmnd), displayYear:filing.filingYear.year]
+	}
+	
+	def fileOrAmend() {
+		filing.amendments.size() < 2 ? 'file' : 'amend'
+	}
+
+	// TODO No! should reload and stay on same page
+	def reloadData() {
+		redirect controller:'dispatch', action:'refreshFilingsAndExempts'
+	}
+	
+	// first & general entry point to controller - called from dispatcher for ROLE_FIRM
+	def summary() {
+		def fyCurr = liuService.filingYears[-1]
+		def fyPrev = liuService.filingYears[-2]
+				
+		[filingsCurr:fyCurr.filings, filingsPrev:fyPrev.filings]
+	}
+	
+	def markRead() {
+		liuService.notifications.each { 
+			it.freshlyAdded = false
+			it.save(flush:true)
+		}
+	}
+	
+	def futureFeature() {
+	}
+}

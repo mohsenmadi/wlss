@@ -1,0 +1,220 @@
+package com.lss.service
+
+import groovy.time.TimeCategory;
+
+import java.text.DateFormatSymbols
+
+import com.lss.client.User
+import com.lss.filing.Filing
+import com.lss.enums.ActivityOwner
+import com.lss.enums.ActivityType
+
+class FilingService {
+
+	def feeMap = [CL:50, RE:65, REO:50]
+	def intervalMap = [Q1:'Jan 1 - Mar 31', Q2:'Apr 1 - Jun 30', Q3:'Jul 1 - Sep 30', Q4:'Oct 1 - Dec 31']
+	def filingMap
+	def liuService
+	def paymentService
+
+	def getLastAmendment(filing) {
+//		filing.isAttached() ?: filing.attach()
+		filing.amendments[-1]
+	}
+
+	def getLastAmendment(firm, yearIdx) {
+		def filings = firm.filingYears[yearIdx].filings
+		Filing lastOpenFiling
+		filings.each {
+			if (isQrEnabled(it)) {
+				lastOpenFiling = it
+			}
+		}
+		getLastAmendment(lastOpenFiling)
+	}
+
+	def getBeforeLastAmendment(filing) {
+		if (filing.amendments.size() < 2) {
+			return null
+		}
+		filing.amendments[-2]
+	}
+
+	def isQrEnabled(filing) {
+		def qrMonth = ((filing.quarter[1] as int) - 1) * 3 + 1
+		def displayYear = filing.filingYear.year as int
+		def currYear = Calendar.instance[Calendar.YEAR]
+		def currMonth = Calendar.instance[Calendar.MONTH] + 1
+		displayYear < currYear ? true :
+				displayYear == currYear ?
+				(currMonth >= qrMonth) : null
+	}
+	
+	def getFirmFilings(filing) {
+		if (liuService.hasFirmRole()) {
+			return [filing]
+		}
+		
+		getLawyerFirmsFilings(filing)
+	}
+	
+	def getLawyerFirmsFilings(filing) {
+		def currYear = Calendar.instance[Calendar.YEAR]
+		def yearIdx = (filing.filingYear.year as int) == currYear ? -1 : -2
+		def qrIdx = (filing.quarter[1] as int) - 1
+		def filingList = [liuService.user.firm.filingYears[yearIdx].filings[qrIdx]]
+		
+		def archiveRecords = User.findAllByUsernameIlike(liuService.username + '~%')
+		if (archiveRecords) {
+			archiveRecords.each {
+				filingList.add(it.firm.filingYears[yearIdx].filings[qrIdx])
+			}
+		}
+		
+		filingList
+	}
+	
+	def getStatus(filing, activityType, personalStatusRequired) {
+		def filings = personalStatusRequired ? getFirmFilings(filing) : [filing]
+						
+		def status = 'Not Filed'
+		
+		filings.find { f ->
+
+			def amnd = getLastAmendment(f)
+
+			def memIncluded = (!personalStatusRequired || liuService.hasFirmRole()) ? true : isMemIncluded(f, amnd, activityType)
+			def hasNumbers = activityType == ActivityType.CL ? (amnd?.cl >= 0) : (amnd?.re >= 0 || amnd?.reo >= 0)
+			
+			if(memIncluded && hasNumbers) {
+//				def dueAmt = (paymentService.calcTotal4status(amnd.cl, amnd.re, amnd.reo, activityType) - f.paid)
+				def dueAmt = activityType == ActivityType.CL ? f.owingCl : f.owingRe
+//				println "== $f.filingYear.year :: $f.quarter :: $activityType :: $dueAmt"
+				status = dueAmt > 0 ? 'Filed not paid' : 'Filed & paid'
+
+				if (status == 'Filed') {
+					return true
+				}
+			}
+		}
+		
+		status
+	 }
+	
+	def isMemIncluded(filing, amnd, activityType) {
+		def memIncluded = true
+		def isCl = activityType == ActivityType.CL ? true : false
+		def inclMems = amnd.memActivities.grep {
+			it.activityOwner == ActivityOwner.FIRM && (isCl ? it.activeCl : it.activeRe)
+		}.member.username
+	
+		// archived members have a '~n' starting at position 8, trim it off if exists
+		memIncluded = inclMems*.substring(0,8).contains(liuService.user.username)
+	}
+
+	def getOutstandingAmount() {
+		
+		def fys = []
+		def user = liuService.user
+
+		if (liuService.isLawyerOnly()) {
+			fys.add(user.filingYears[-1])
+			fys.add(user.filingYears[-2])
+			
+		} else {
+			fys.add(user.firm.filingYears[-1])
+			fys.add(user.firm.filingYears[-2])
+		}
+		
+		def dueAmt = 0
+		fys.each {
+			it.filings.each {f ->	
+					dueAmt += f.owingCl + f.owingRe
+			}
+		}
+		dueAmt
+	}
+
+	
+	def getMiscCharges() {
+		paymentService.getPayCharges()
+	}
+
+	def getTotalDueAmount() {
+		getOutstandingAmount() + getMiscCharges()
+	}
+
+	// TODO: YB: tune this one and remove this comment when done pls
+	def getLastPaymentDate() {
+		def date = new Date()
+		use (TimeCategory) {
+			date = date - 2.days
+		}
+		date
+	}
+	
+	def setFilingMap() {
+		setFilingMap(liuService.filingYears[-1].filings[-1])
+	}
+
+	def setFilingMap(filing) {
+		def amnd = getLastAmendment(filing)
+		def currCl = amnd.cl ?: 0
+		def currRe = amnd.re ?: 0
+		def currReo = amnd.reo ?: 0
+
+		def costCl = currCl * feeMap.CL
+		def costRe = currRe * feeMap.RE
+		def costReo = currReo * feeMap.REO
+		def totCost = costCl + costRe + costReo
+
+		def qr = ((filing.quarter[1] as int) - 1) * 3
+		def month = new DateFormatSymbols().months[qr]
+
+		def enabled = isQrEnabled(filing)
+		
+		def clStatus
+		def reStatus
+		def mclStatus
+		def mreStatus
+		if (liuService.isLawyerOnly()) {
+			clStatus = enabled ? (filing.firmFiledCl ? 'Included' : 'Not Included') : "Open to filing $month 1st"
+			reStatus = enabled ? (filing.firmFiledRe ? 'Included' : 'Not Included') : "Open to filing $month 1st"
+			mclStatus = enabled ? getStatus(filing, ActivityType.CL, false) : ''
+			mreStatus = enabled ? getStatus(filing, ActivityType.RE, false) : ''
+		} else {
+			clStatus = enabled ? getStatus(filing, ActivityType.CL, true) : "Open to filing $month 1st"
+			reStatus = enabled ? getStatus(filing, ActivityType.RE, true) : "Open to filing $month 1st"
+		}
+		
+		def currReFamily = (amnd.re == null && amnd.reo == null) ? null : (currRe + currReo)
+
+		filingMap = [
+			id:filing.id,
+			confirmation:amnd.confirmation,
+			enabled:enabled,
+			clStatus:clStatus,
+			reStatus:reStatus,
+			mclStatus:mclStatus,
+			mreStatus:mreStatus,
+			outstandingAmount:getOutstandingAmount(),
+			miscCharges:getMiscCharges(),
+			totalDueAmount:getTotalDueAmount(),
+			lastPaymentDate:getLastPaymentDate(),
+			year:filing.filingYear.year,
+			qr:filing.quarter,
+			due:filing.owingCl + filing.owingRe,
+			paid:filing.paid,
+			dateCreated:amnd.dateCreated,
+			currCl:amnd.cl,
+			currRe:amnd.re,
+			currReo:amnd.reo,
+			currReFamily:currReFamily,
+			currReFamilyCost:(costRe + costReo),
+			totTypes:(currCl + currRe + currReo),
+			costCl:costCl,
+			costRe:costRe,
+			costReo:costReo,
+			totCost:totCost]
+	}
+}

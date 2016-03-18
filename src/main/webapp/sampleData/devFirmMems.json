@@ -1,0 +1,435 @@
+{
+  "firmKey": "asdf0",
+  "lawyers": [
+    {
+      "lawyer": {
+        "fname": "Jill Marie",
+        "lname": "Knudsen",
+        "password": "A028957Alss",
+        "referKey": "A028957A"
+      },
+      "qtrs": [
+        "2015-1",
+        "2015-2",
+        "2015-3",
+        "2015-4",
+        "2014-1",
+        "2014-2",
+        "2014-3",
+        "2014-4"
+      ]
+    },
+    {
+      "lawyer": {
+        "fname": "Jeffrey Kent",
+        "lname": "Spiegelman",
+        "password": "A031299Olss",
+        "referKey": "A031299O"
+      },
+      "qtrs": [
+        "2015-1"
+      ]
+    },
+    {
+      "lawyer": {
+        "fname": "Michael Allan",
+        "lname": "Kleinman",
+        "password": "1818",
+        "referKey": "A025862O"
+      },
+      "qtrs": [
+        "2015-1",
+        "2015-2",
+        "2015-3",
+        "2015-4",
+        "2014-1",
+        "2014-2",
+        "2014-3",
+        "2014-4"
+      ]
+    },
+    {
+      "lawyer": {
+        "fname": "Ivor Martin",
+        "lname": "Hughes",
+        "password": "LPIMH",
+        "referKey": "A012938E"
+      },
+      "qtrs": [
+        "2014-1"
+      ]
+    },
+    {
+      "lawyer": {
+        "fname": "Doron",
+        "lname": "Noah",
+        "password": "WIZZ",
+        "referKey": "A050335N"
+      },
+      "qtrs": [
+        "2015-1",
+        "2015-2",
+        "2015-3",
+        "2015-4",
+        "2014-1",
+        "2014-2",
+        "2014-3",
+        "2014-4"
+      ]
+    },
+    {
+      "lawyer": {
+        "fname": "Ronald Morley",
+        "lname": "Kanter",
+        "password": "ANNEX1903",
+        "referKey": "A015669W"
+      },
+      "qtrs": [
+        "2015-1",
+        "2015-2",
+        "2015-3",
+        "2015-4",
+        "2014-1",
+        "2014-2",
+        "2014-3",
+        "2014-4"
+      ]
+    },
+    {
+      "lawyer": {
+        "fname": "Matthew Irwin",
+        "lname": "Wise",
+        "password": "NEW CALL",
+        "referKey": "A042376A"
+      },
+      "qtrs": [
+        "2015-1",
+        "2015-2",
+        "2015-3",
+        "2015-4",
+        "2014-1",
+        "2014-2",
+        "2014-3",
+        "2014-4"
+      ]
+    },
+    {
+      "lawyer": {
+        "fname": "Jordan Michael",
+        "lname": "Cohen",
+        "password": "JORDYC",
+        "referKey": "A021600L"
+      },
+      "qtrs": [
+        "2015-1",
+        "2015-2",
+        "2015-3",
+        "2015-4",
+        "2014-1",
+        "2014-2",
+        "2014-3",
+        "2014-4"
+      ]
+    },
+    {
+      "lawyer": {
+        "fname": "Ali Reza",
+        "lname": "Baniasadi",
+        "password": "PRINCEALI",
+        "referKey": "A052760U"
+      },
+      "qtrs": [
+        "2015-1",
+        "2015-2",
+        "2015-3",
+        "2015-4",
+        "2014-1",
+        "2014-2",
+        "2014-3",
+        "2014-4"
+      ]
+    },
+    {
+      "lawyer": {
+        "fname": "Mauro",
+        "lname": "Carabetta",
+        "password": "JOAOMATTEO69",
+        "referKey": "A054223M"
+      },
+      "qtrs": [
+        "2014-1"
+      ]
+    },
+    {
+      "lawyer": {
+        "fname": "John Francis",
+        "lname": "Collins",
+        "password": "SESAMEPRO",
+        "referKey": "A016698T"
+      },
+      "qtrs": [
+        "2015-1",
+        "2015-2",
+        "2015-3",
+        "2015-4",
+        "2014-1",
+        "2014-2",
+        "2014-3",
+        "2014-4"
+      ]
+    },
+    {
+      "lawyer": {
+        "fname": "Lauren Danielle",
+        "lname": "Sigal",
+        "password": "LAUREN0823",
+        "referKey": "A061567I"
+      },
+      "qtrs": [
+        "2015-1",
+        "2015-2",
+        "2015-3",
+        "2015-4",
+        "2014-1",
+        "2014-2",
+        "2014-3",
+        "2014-4"
+      ]
+    },
+    {
+      "lawyer": {
+        "fname": "Elizabeth",
+        "lname": "Agbi",
+        "password": "EGGSHELL",
+        "referKey": "A062784W"
+      },
+      "qtrs": [
+        "2015-1",
+        "2015-2",
+        "2015-3",
+        "2015-4"
+      ]
+    },
+    {
+      "lawyer": {
+        "fname": "Sean Franklin",
+        "lname": "Zaboroski",
+        "password": "424BALLIOL",
+        "referKey": "A047313L"
+      },
+      "qtrs": [
+        "2014-1",
+        "2014-2"
+      ]
+    },
+    {
+      "lawyer": {
+        "fname": "Christine",
+        "lname": "Jonathan",
+        "password": "STONES",
+        "referKey": "A028487J"
+      },
+      "qtrs": [
+        "2015-1",
+        "2015-2",
+        "2015-3",
+        "2015-4",
+        "2014-1",
+        "2014-2",
+        "2014-3",
+        "2014-4"
+      ]
+    },
+    {
+      "lawyer": {
+        "fname": "Matthew Justin",
+        "lname": "Zuk",
+        "password": "18CROYDON",
+        "referKey": "A060670J"
+      },
+      "qtrs": [
+        "2015-1",
+        "2015-2",
+        "2015-3",
+        "2015-4",
+        "2014-1",
+        "2014-2",
+        "2014-3",
+        "2014-4"
+      ]
+    },
+    {
+      "lawyer": {
+        "fname": "Howard Floyd",
+        "lname": "Manis",
+        "password": "A034366Vlss",
+        "referKey": "A034366V"
+      },
+      "qtrs": [
+        "2015-1",
+        "2015-2",
+        "2015-3",
+        "2015-4",
+        "2014-1",
+        "2014-2",
+        "2014-3",
+        "2014-4"
+      ]
+    },
+    {
+      "lawyer": {
+        "fname": "David Jules",
+        "lname": "Gray",
+        "password": "BEAR",
+        "referKey": "A041485A"
+      },
+      "qtrs": [
+        "2015-1",
+        "2015-2",
+        "2015-3",
+        "2015-4",
+        "2014-1",
+        "2014-2",
+        "2014-3",
+        "2014-4"
+      ]
+    },
+    {
+      "lawyer": {
+        "fname": "Ross Norman",
+        "lname": "Macdonald",
+        "password": "NEW CALL",
+        "referKey": "A021015W"
+      },
+      "qtrs": [
+        "2015-1",
+        "2015-2",
+        "2015-3",
+        "2015-4",
+        "2014-1",
+        "2014-2",
+        "2014-3",
+        "2014-4"
+      ]
+    },
+    {
+      "lawyer": {
+        "fname": "Paul",
+        "lname": "Jacobs",
+        "password": "VIRTUS",
+        "referKey": "A011982K"
+      },
+      "qtrs": [
+        "2015-1",
+        "2015-2",
+        "2015-3",
+        "2015-4",
+        "2014-1",
+        "2014-2",
+        "2014-3",
+        "2014-4"
+      ]
+    },
+    {
+      "lawyer": {
+        "fname": "Shawn Lev",
+        "lname": "Pulver",
+        "password": "ROBINS",
+        "referKey": "A051129L"
+      },
+      "qtrs": [
+        "2015-1",
+        "2015-2",
+        "2015-3",
+        "2015-4",
+        "2014-1",
+        "2014-2",
+        "2014-3",
+        "2014-4"
+      ]
+    },
+    {
+      "lawyer": {
+        "fname": "Nathan David",
+        "lname": "Kornhauser",
+        "password": "GIRLS4US",
+        "referKey": "A026954N"
+      },
+      "qtrs": [
+        "2015-1",
+        "2015-2",
+        "2015-3",
+        "2015-4",
+        "2014-1",
+        "2014-2",
+        "2014-3",
+        "2014-4"
+      ]
+    },
+    {
+      "lawyer": {
+        "fname": "Steven Jeffrey",
+        "lname": "Sager",
+        "password": "GOALIE",
+        "referKey": "A029661N"
+      },
+      "qtrs": [
+        "2015-1",
+        "2015-2",
+        "2015-3",
+        "2015-4",
+        "2014-1",
+        "2014-2",
+        "2014-3",
+        "2014-4"
+      ]
+    },
+    {
+      "lawyer": {
+        "fname": "Kevin George",
+        "lname": "Bateman",
+        "password": "KYLE",
+        "referKey": "A029100L"
+      },
+      "qtrs": [
+        "2015-1",
+        "2015-2",
+        "2015-3",
+        "2015-4",
+        "2014-1",
+        "2014-2",
+        "2014-3",
+        "2014-4"
+      ]
+    },
+    {
+      "lawyer": {
+        "fname": "Debora Alana",
+        "lname": "Miller-Lichtenstein",
+        "password": "C3NWK8CB",
+        "referKey": "A066397T"
+      },
+      "qtrs": [
+        "2015-1",
+        "2015-2",
+        "2015-3",
+        "2015-4",
+        "2014-4"
+      ]
+    },
+    {
+      "lawyer": {
+        "fname": "Marni Mary Ann Kathleen",
+        "lname": "Whitaker",
+        "password": "NEW CALL",
+        "referKey": "A015020E"
+      },
+      "qtrs": [
+        "2015-1",
+        "2015-2",
+        "2015-3",
+        "2015-4"
+      ]
+    }
+  ]
+}

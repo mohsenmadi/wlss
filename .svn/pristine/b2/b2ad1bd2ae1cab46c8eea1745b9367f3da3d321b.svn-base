@@ -1,0 +1,429 @@
+#signOut {
+	color: #1d588d;
+	height: 20px;
+	padding-top: 0px;
+	font-size: 13px;
+	background-color: #adcee9;
+	background-image: none;
+	border: 1px solid #87b7de;
+	border-radius: 4px;
+}
+
+#tableLabel {
+	font-weight: bold;
+}
+
+#copyBtn {
+	background-color: transparent;
+	border-radius: 4px;
+	padding: 0 5px 2px 5px;
+	font-size: 12px;
+}
+
+#signOut:hover {
+	background: #92a9b4;
+}
+
+#qrBtn {
+	position: relative;
+	color: rgb(255, 255, 255);
+	background-color: #74C2E1;
+	font-size: 11px;
+	padding: 2px;
+	-webkit-border-radius: 7px;
+	-moz-border-radius: 7px;
+	border-radius: 7px;
+	-webkit-box-shadow: 0px 6px 0px #0191C8, 0px 3px 6px rgba(0, 0, 0, .7);
+	-moz-box-shadow: 0px 6px 0px #0191C8, 0px 3px 6px rgba(0, 0, 0, .7);
+	box-shadow: 0px 6px 0px #0191C8, 0px 3px 6px rgba(0, 0, 0, .7);
+	width: 27px;
+}
+
+#qrBtn:active {
+	-webkit-box-shadow: 0px 3px 0px #005B9A, 0px 3px 6px rgba(0, 0, 0, .9);
+	-moz-box-shadow: 0px 3px 0px #005B9A, 0px 3px 6px rgba(0, 0, 0, .9);
+	box-shadow: 0px 3px 0px #005B9A, 0px 3px 6px rgba(0, 0, 0, .9);
+	position: relative;
+	top: 2px;
+}
+
+#qrBtn:disabled, #qrBtn:disabled:hover {
+	background: #bbb;
+}
+
+#addBtn {
+	color: #fff;
+	background-color: #72aad8;
+	border-color: #2e6da4;
+	border: 1px solid transparent;
+	border-radius: 4px;
+}
+
+#addBtn:disabled, #addBtn:disabled:hover {
+	background: #bbb;
+}
+
+#addBtn:hover {
+	background: #3687c9;
+}
+
+#cancelBtn {
+	color: #fff;
+	background-color: #72aad8;
+	border-color: #2e6da4;
+	border: 1px solid transparent;
+	border-radius: 4px;
+}
+
+#cancelBtn:hover {
+	background: #3687c9;
+}
+
+#searchBtn {
+	color: #555555;
+	background-color: #deebf5;
+	background-image: none;
+	border-color: #c8c8d2;
+	border-radius: 4px;
+}
+
+#searchBtn:hover {
+	background: #a7cae4;
+}
+
+#userDetails {
+	color: #31708f;
+	font-size: small;
+	padding-top: 15px;
+}
+
+#alertBtn {
+	font-size: 12px;
+	border-radius: 8px;
+}
+
+#rowDue {
+	color: #666666;
+	font-weight: bold;
+}
+
+#overDue {
+	color: #ff5555;
+	font-weight: bold;
+}
+
+#notFiledText {
+	color: #b15353;
+}
+
+#noDues {
+	color: #44bb44;
+	font-weight: bold;
+}
+
+#underDue {
+	color: #6666ff;
+	font-weight: bold;
+}
+
+.qrTable {
+	padding: 0px;
+	color: #2f6d8c;
+	font-size: 11px;
+}
+
+.qrTable tbody tr:hover td, .qrTable tbody tr:hover th {
+	background-color: #fff;
+}
+
+.opacityHalf {
+	opacity: 0.6;
+}
+
+#rpad {
+	padding-right: 10px;
+}
+
+.textLawpro {
+	color: #20495e;
+}
+
+.textLawproBold {
+	color: #235369;
+	font-weight: bold;
+	font-size: small;
+}
+
+.inputReadOnly {
+	width: 45px;
+	text-align: right;
+	padding-top: 0px;
+	background-color: #fff;
+	border-width: 0px;
+}
+
+#exemptStyle {
+	font-size: 9px;
+	border-style: solid;
+	color: #945C5B;
+	border-width: thin;
+	border-radius: 5px;
+	padding: 1px;
+	padding-left: 2px;
+	padding-right: 2px;
+}
+
+.iconInfo {
+	color: #5f74a0;
+	cursor: pointer;
+	/*background-color: #fff;*/
+	border-radius: 10px;
+	border: 1px solid #e8ecee;
+	font-size: 13px;
+}
+
+#amendmentTable {
+	width: auto;
+	padding: 0px;
+	margin: 0px;
+	border: 0px;
+	font-size: 85%;
+	color: #20495e;
+}
+
+#amendmentTable tbody tr:hover td, #amendmentTable tbody tr:hover th {
+	background-color: #fff;
+}
+
+#amendmentTableOpen {
+	width: auto;
+	padding: 0px;
+	margin: 0px;
+	border: 0px;
+	font-size: 85%;
+	color: #20495e;
+}
+
+input[type=checkbox][disabled] {
+	outline:1px solid #fff;
+}
+
+/*
+.memberTable {
+	font-size: 90%;
+	color: #20495e;
+}
+
+.memberTable tbody tr:hover td, .memberTable tbody tr:hover th {
+	background-color: #fff;
+}
+
+.memberTableOpen {
+	font-size: 90%;
+	color: #20495e;
+}
+*/
+
+#tableCellStyle {
+	padding-top: 8px;
+	text-align: right;
+}
+
+#qrSummaryTable tbody tr:hover td, #qrSummaryTable tbody tr:hover th {
+	background-color: #fff;
+}
+
+#qrSummaryTable td {
+	padding: 2px 5px 2px 4px;
+}
+
+.spinnerWidth {
+	width:60px;
+}
+
+.totalFieldWidth {
+	width:70px;
+}
+
+#firmSummaryTable {
+	border: 0px;
+	color: #3784a8;
+}
+
+#firmSummaryTable tbody tr:hover td, #firmSummaryTable tbody tr:hover th
+{
+	background-color: #f2f2f2;
+}
+
+#firmSummaryTable td {
+	padding: 2px 5px 2px 4px;
+}
+
+tr {
+	line-height: 15px;
+	min-height: 15px;
+	max-height: 15px;
+	height: 15px;
+}
+
+tr.border_bottom td {
+	border-top: 1pt solid black;
+	border-bottom: 1pt solid black;
+}
+
+#payBtn {
+	color: #fff;
+	background-color: #72aad8;
+	border-color: #2e6da4;
+	border: 1px solid transparent;
+	border-radius: 4px;
+}
+
+#payBtn:hover {
+	background: #3687c9;
+}
+
+#divBorder {
+	border-radius: 5px;
+	border: 1px solid #cccccc;
+	padding: 10px 10px 0px 10px;
+	background: #f0f0f0;
+}
+
+#divBorder2 {
+	border-radius: 5px;
+	border: 1px solid #cccccc;
+	margin: 0px;
+	background: #e0e0e0;
+}
+
+#infoText {
+	color: #2e8d69;
+	font-style: normal;
+	font-size: 13px;
+}
+
+#divBorderFirmNums {
+	padding-left: 10px;
+	font-size: 85%;
+	padding: 0 0 0 10px;
+	margin-bottom: 10px;
+	border-radius: 5px;
+	border: 1px dashed #dadada;
+	background: #f2f2f2;
+	min-width: 420px;
+}
+
+#divBorder3 {
+	padding: 5px;
+	border-radius: 5px;
+	border: 1px solid #dfdfdf;
+	background: #f6f6f6;
+}
+
+#titleFont {
+	font-weight: normal;
+	color: #2f6d8c;
+	font-size: 18px;
+}
+
+.table-bordered tr:hover, td:hover{
+	background-color: #fff;
+}
+
+.table-bordered th:hover {
+	background: #f6f6f6;
+}
+
+.pAuthorization{
+	height:250px;
+	overflow:auto;
+	width:75%;
+	box-sizing:border-box;
+	border:1px solid grey;
+	color:#086C77;
+	margin-left: 40px ;
+}
+
+.payTotals{
+	width:80px;
+	text-align: right;
+	border-width: 0px;
+	padding-right:4px;
+}
+
+#textAreaFin {
+	width: 450px;
+	height: 70px;
+	resize: none;
+	margin-left: 8px;
+}
+
+/* *** */
+
+tr {
+	height: 0px;
+}
+
+section {
+	position: relative;
+	border: 1px solid #bababa;
+	padding-top: 34px;
+	background: #EFEFEF;
+}
+
+section.positioned {
+	position: absolute;
+	top:100px;
+	left:100px;
+	width:100%;
+	padding-bottom: 40px;
+
+	/*box-shadow: 0 0 15px #333;*/
+}
+
+#fxhtc {
+	overflow-y: auto;
+	height: 100%;
+}
+
+#fxht {
+	border-spacing: 0;
+	width:100%;
+}
+
+.fxht td + td {
+  /*border-left:1px solid #eee;*/
+}
+
+.fxht td, .fxht th {
+  border-bottom:1px solid #eee;
+  background: #FDFDFD;
+	font-size: 90%;
+	color: #20495e;
+	/*padding: 2px 15px 2px 3px;*/
+	padding: 3px 2px 3px 2px;
+}
+
+.fxht th {
+	height: 0px;
+	line-height: 0;
+	padding-top: -10px;
+	padding-bottom: 0px;
+	color: transparent;
+	border: none;
+}
+
+.fxht th .divth{
+  position: absolute;
+  background: transparent;
+	color: #1f6176;
+  padding: 9px 25px;
+  top: 0;
+  margin-left: -25px;
+  line-height: normal;
+}
+.fxht th:first-child .divth{
+  border: none;
+}
+

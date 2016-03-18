@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en" class="no-js">
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title><g:layoutTitle default="Grails"/></title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="shortcut icon" href="${assetPath(src: 'lawproFavicon.jpg')}" type="image/x-icon">
+
+	<asset:stylesheet href="bootstrap.min.css"/>
+	<asset:javascript src="bootstrap.min.js"/>
+
+	<asset:javascript src="filing.js"/>
+
+	<asset:stylesheet href="application.css"/>
+	<asset:javascript src="application.js"/>
+
+	<asset:stylesheet href="lss.css"/>
+	<g:layoutHead/>
+</head>
+
+<body>
+<div id="grailsLogo" class="row" role="banner">
+
+	<div class="col-sm-3">
+		<a href="http://${request.getServerName()}:${request.getServerPort()}${request.getContextPath()}">
+			<asset:image title="Levy Surcharge Home" src="LawPRO.png" alt="LawPRO"/>
+			<div style="height: 4px"></div>
+			<span style="padding-left:21px;font-size:12px" class="hidden-print">Levy Surcharge Home</span>
+		</a>
+	</div>
+
+	<div class="col-sm-4 hidden-print">
+		<sec:ifLoggedIn>
+			<g:render template="/common/dashboard"/>
+		</sec:ifLoggedIn>
+	</div>
+
+	<div class="col-sm-5">
+		<sec:ifLoggedIn>
+			<g:render template="/common/userDetails"/>
+		</sec:ifLoggedIn>
+	</div>
+</div>
+
+<g:layoutBody/>
+
+<div class="footer" role="contentinfo" align="center">
+	© 2015 Lawyers' Professional Indemnity Company (L<span style="font-variant: small-caps;">aw</span>PRO).
+All Rights Reserved.
+</div>
+
+<div id="spinner" class="spinner" style="display: none;">
+	<g:message code="spinner.alt" default="Loading&hellip;"/>
+</div>
+
+</body>
+
+</html>

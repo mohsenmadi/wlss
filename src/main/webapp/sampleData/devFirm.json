@@ -1,0 +1,16 @@
+{
+  "found": true,
+  "firm": {
+    "referKey": "asdf0",
+    "name": "LawPRO DevDev",
+    "password": "asdf",
+    "street": "#800 150 York St",
+    "phone": "111-555-7777",
+    "fax": "222-555-8888",
+    "city": "Toronto",
+    "province": "ON",
+    "postCode": "M5H 3S5",
+    "email": "dev@lawpro.ca",
+    "enabled": true
+  }
+}

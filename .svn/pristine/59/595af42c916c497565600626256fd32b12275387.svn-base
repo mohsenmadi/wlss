@@ -1,0 +1,168 @@
+package com.lss.service
+
+import com.lss.client.User
+import com.lss.client.Role
+import com.lss.enums.ActivityOwner;
+import com.lss.enums.LssRole
+import grails.transaction.Transactional
+
+@Transactional
+class LiuService {
+
+	def springSecurityService
+	def passwordEncoder
+	def filingService
+	def securityCareTaker
+	
+	def roleLawyer
+	def roleFirm
+	
+	def getLiUser() {
+		springSecurityService.currentUser
+	}
+	
+	def liUserIsFin() {
+		liUser.authorities.authority.contains(LssRole.ROLE_FINANCE.toString())		
+	}
+	
+	def liUserIsCustSrv() {
+		liUser.authorities.authority.contains(LssRole.ROLE_CUSTSRV.toString())		
+	}
+	
+	def liUserIsFinOrCustSrv() {
+		liUserIsFin() || liUserIsCustSrv()
+	}
+	
+	def getForUsername() {
+		liUser?.forUsername
+	}
+	
+	def resetForUsername() {
+		liUser.forUsername = null
+	}
+	
+	def setForUsername(referKey) {
+		liUser.forUsername = referKey
+		liUser.save(flush:true)
+	}
+	
+	def getUser() {
+		!forUsername ? liUser : User.findByUsername(liUser.forUsername)
+	}
+
+	def getFirm() {
+		user.firm
+	}
+	
+	def getAuthorities() {
+		user?.authorities?.authority
+	}
+	
+	def getUsername() {
+		user?.username
+	}
+	
+	def hasRole(role) {
+		authorities.contains(role.toString())
+	}
+	
+	def hasFirmRole() {
+		hasRole(LssRole.ROLE_FIRM)
+	}
+	
+	def hasFirmRole(rkOwner) {
+		rkOwner.authorities.authority.contains(LssRole.ROLE_FIRM.toString())
+	}
+	
+	def hasLawyerRole() {
+//		hasRole(LssRole.ROLE_LAWYER)
+		// TODO IMPRV: throw top put below
+		user.lawyerRole
+	}
+	
+	def hasFirmOrLawyerRole() {
+		hasFirmRole() || hasLawyerRole()
+	}
+	
+	def hasFinanceRole() {
+		hasRole(LssRole.ROLE_FINANCE)
+	}
+	
+	def hasCustSrvRole() {
+		hasRole(LssRole.ROLE_CUSTSRV)
+	}
+	
+	def hasFinanceOrCustSrvRole() {
+		hasFinanceRole() || hasCustSrvRole()
+	}
+	
+	def isLawyerOnly() {
+		authorities.size() == 1 && hasLawyerRole()
+	}
+	
+	def getActivityOwner() {
+		hasRole(LssRole.ROLE_FIRM) ? ActivityOwner.FIRM : ActivityOwner.LAWYER
+	}
+	
+	def getOwner() {
+		isLawyerOnly() ? user : firm
+	}
+	
+	def getFilingYears() {
+		owner.filingYears
+	}
+	
+	def getNotifications() {
+		owner.notifications
+	}
+
+	def getFirmLawyers() {
+//		def lawyers
+//		if (hasFirmRole()) {
+//			lawyers = User.findAllByFirm(firm).grep {
+//				it.authorities.authority.contains(LssRole.ROLE_LAWYER.toString())
+//			}
+//		}
+//		lawyers
+		User.findAllByFirmAndLawyerRole(firm, true)
+	}
+	
+	def getRoleLawyer() {
+		roleLawyer = roleLawyer ?: Role.findByAuthority(LssRole.ROLE_LAWYER.toString())
+	}
+	
+	def getRoleFirm() {
+		roleFirm = roleFirm ?: Role.findByAuthority(LssRole.ROLE_FIRM.toString())
+	}
+
+	def getLawyersYcurr() {
+		getLawyers4fy(-1)
+	}
+
+	def getLawyersYprev() {
+		getLawyers4fy(-2)
+	}
+	
+	def trimKeys(lawyers) {
+		lawyers.username*.substring(0, 8)
+	}
+	
+	def getLawyers4fy(idx) {
+		filingYears[idx].filings*.collect {
+			filingService.getLastAmendment(it).memActivities.member
+		}.flatten() as Set
+	}
+	
+	def validPassword(password) {
+		if (!password || !passwordEncoder.isPasswordValid(user.password, password, null)) {
+			return false
+		} 
+		true
+	}
+	
+	def firmJustAdded() {
+		def isAdded = securityCareTaker.migrateSuccess ? true : false
+		securityCareTaker.migrateSuccess = false
+		isAdded
+	}
+}

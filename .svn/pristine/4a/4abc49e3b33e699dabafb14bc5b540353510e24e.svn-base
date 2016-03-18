@@ -1,0 +1,351 @@
+package com.lss.payment
+
+import static org.springframework.http.HttpStatus.*
+
+import java.util.List;
+
+import grails.transaction.Transactional
+
+import com.lss.client.*
+import com.lss.filing.*
+import com.lss.payment.Cheque;
+import com.lss.payment.CreditCard;
+import com.lss.payment.Eft;
+import com.lss.service.LiuService;
+import com.lss.payment.PayCharge;
+
+class PaymentController implements Serializable {
+	def liuService
+	def paymentService
+	def filingService
+	def feeMap = [CL:50, RE:65, REO:50]
+	def payTypes=[CC:"Credit Card",EFT:"EFT",CHQ:"Cheque"]
+
+	static defaultAction = "loadData"
+	
+	def loadData() {
+		
+		def user = liuService.user
+//		def displayYear = Calendar.instance[Calendar.YEAR]
+		def fy1 = []
+		def referKey
+
+		if(liuService.isLawyerOnly()) {
+			fy1.add(user.filingYears[-1])
+			fy1.add(user.filingYears[-2])
+			
+			referKey = user.username
+		}else {
+			referKey=user.firm.referKey
+			
+			fy1.add(user.firm.filingYears[-1])
+			fy1.add(user.firm.filingYears[-2])
+			
+		}
+//		println "referKey...${referKey}.....${fy1}"
+		paymentService.updateOwing()
+	
+		def chrg = paymentService.getPayCharges()
+//		println chrg
+		def payTrxs = [:]
+		for(f1 in fy1) {
+			def filings = f1.filings
+//			println filings
+		
+			filings.each {f ->
+				def a = filingService.getLastAmendment(f)
+				if(a) {
+//					def dueAmt=(paymentService.calcTotal(a.cl,a.re, a.reo) - f.paid)
+					def dueAmt = f.owingCl + f.owingRe
+					def tAmt = paymentService.calcTotal(a.cl,a.re, a.reo)
+//					paymentService.updateOwing(f,tAmt)
+					if(dueAmt>0) {
+					payTrxs."${a.id}"= [
+						filingId:f.id,
+						referKey:referKey,
+						fy:f.filingYear.year,
+						qtr:f.quarter,
+						cl:a.cl,
+						re:a.re,
+						reo:a.reo,
+						totAmt:tAmt,
+						paid: f.paid,
+						due: dueAmt
+					]
+					}
+				}
+			} //for each filing
+		}
+			
+		[paytrxs:payTrxs,feeMap:feeMap,payTypes:payTypes,charges:chrg ]
+		
+	}
+
+	def renderPaymentView() {
+		loadData();
+	}
+
+	def refreshPayMethods() {
+//		def userKey = liuService.isLawyerOnly()?liuService.user.username:liuService.user.firm.referKey
+		
+//		println userKey
+		if(params.pMethod == "CC") {
+			def payPref = paymentService.getPaymentPreferences("CC",liuService.username)			
+//		println ".....${payPref}...."
+			render(template:"creditCard",model:[payPref:payPref])
+		}else if(params.pMethod == "EFT") {
+			def bankInst = paymentService.getBankInst()			
+			def payPref = paymentService.getPaymentPreferences("EFT",liuService.username)
+			render(template:"eft",model:[payPref:payPref,bankInst:bankInst])
+		}else if(params.pMethod == "CHQ") {
+			render(template:"cheque")
+		}else {
+			render("")
+		}
+	}
+	
+	def cancel() {
+		redirect(controller:'payment', action:'loadData')
+//		println params
+//		redirect uri: '/'
+	}
+	
+	
+	
+	def checkout() {
+//		println '.......checking out...........'
+//		withForm {
+			println "checking out........... ${params} }"
+			switch(params.payType){
+				case 'CC': 
+					saveCC(params)
+					break
+				case 'EFT':
+					saveEft(params)
+					break
+				case 'CHQ':
+					saveCheque(params)
+					break
+				default:
+					break
+			}
+			
+//		}.invalidToken {
+//			println('bad request')
+//			redirect(controller:'payment', action:'loadData')
+//	 }
+	}
+	
+	
+	
+	@Transactional
+	def saveCC(params) {		
+		def filingKeys = []
+		filingKeys.addAll(params.fKey)
+
+		def pId = paymentService.generatePayKey()
+
+		double paidAmt= params.payTot.toDouble() 
+		println "paidAmt = ${paidAmt}"
+		def user = liuService.user
+		
+		def pay = new CreditCard (
+			payId:pId, //temp id 
+//			referKey:"${liuService.isLawyerOnly()?liuService.user.username:liuService.user.firm.referKey}",
+			referKey:"${liuService.username}",
+			amt:paidAmt,
+			payStatus:0, 
+			nameOnCard:params.ccName,
+			ccType:params.ccType,
+			ccNo:params.ccNo,
+			expiryDate:params.expiryDate,
+			saveInfo:params.cSafeInfo=="on"?1:0,
+			authorize:params.cAuthorize=="on"?1:0
+			)
+		
+		if(pay.validate()) {
+			def charges = paymentService.getPayCharges()
+			def amendsToPay = paymentService.findAmendsToPay(filingKeys)
+			def jsonResponse = paymentService.savePayment(amendsToPay,pay,"CC")		// webservice will return the status
+			println "jsonResponse =${jsonResponse}"
+			 
+			if(jsonResponse.postStatus == 1) {
+				paymentService.updatePayment(amendsToPay,pay,jsonResponse.postStatus,jsonResponse.authNumber,jsonResponse.confirmation)				
+			}			
+			paymentService.updateOwing()
+			confirmation(pay.ccNo.substring(pay.ccNo.length() - 4, pay.ccNo.length()),
+				
+				jsonResponse.postStatus==1?"Approved":"Declined",
+				jsonResponse.message,
+				jsonResponse.authNumber,
+				amendsToPay,
+				pay.payId, 
+				pay.amt,
+				charges				
+				)
+		
+		}else {
+//			if(pay.errors.hasErrors()){
+//				flash.message = "Errors making submission"
+//			}
+//			println 'oops!!'
+			redirect uri: '/'
+		}
+	}
+	
+		
+	
+	@Transactional
+	def saveCheque(params) {
+		
+		def filingKeys = []
+		filingKeys.addAll(params.fKey)
+	
+		def pId = paymentService.generatePayKey()
+		double paidAmt= params.payTot.toDouble()
+		def user = liuService.user
+		def pay = new Cheque (
+			payId:pId,
+			referKey:"${liuService.username}",
+			amt:paidAmt,
+			payStatus:0,                 //todo  update correct status after Webservice call
+			authorize:params.cAuthorize=="on"?1:0
+			)
+		
+		if(pay.validate()) {
+			def charges = paymentService.getPayCharges()
+			def amendsToPay = paymentService.findAmendsToPay(filingKeys)
+			def jsonResponse = paymentService.savePayment(amendsToPay,pay,"CHEQUE")
+			
+			if(jsonResponse.postStatus == 1) {
+				paymentService.updatePayment(amendsToPay,pay,jsonResponse.postStatus,jsonResponse.authNumber,jsonResponse.confirmation)
+			}
+			paymentService.updateOwing()
+				
+			confirmation("cheque",
+			"Accepted",
+			"Payment option has been submitted to LAWPRO Systems",
+			0,
+			amendsToPay,
+			pay.payId, 
+			pay.amt,
+			charges
+			)
+			
+		}else {
+//			println 'oops!!'
+			redirect uri: '/'
+		}
+	}
+
+
+
+	
+	
+	@Transactional
+	def saveEft(params) {
+		def filingKeys = []
+		def user = liuService.user
+		filingKeys.addAll(params.fKey)
+
+//		println filingKeys
+		
+		def pId = paymentService.generatePayKey()
+		double paidAmt= params.payTot.toDouble()
+		
+		def pay = new Eft(
+			payId:pId,
+			nameOnCard:params.eName,
+			referKey:"${liuService.username}",
+//			referKey:"${liuService.isLawyerOnly()?liuService.user.username:liuService.user.firm.referKey}",
+			amt:paidAmt,
+			payDate:new Date(),
+			payStatus:0,
+			instNo: params.eBank,
+			transitNo:params.eTransit,
+			accNo:params.eAccount,
+			saveInfo:params.cSafeInfo=="on"?1:0,
+			authorize:params.cAuthorize=="on"?1:0
+		)
+		
+		if(pay.validate()) {
+			def charges = paymentService.getPayCharges()
+			def amendsToPay = paymentService.findAmendsToPay(filingKeys)
+			def jsonResponse = paymentService.savePayment(amendsToPay,pay,"EFT")		// webservice will return the status
+
+			if(jsonResponse) {
+				if(jsonResponse.postStatus == 1) {//successful
+					paymentService.updatePayment(amendsToPay,pay,jsonResponse.postStatus,jsonResponse.authNumber,jsonResponse.confirmation)
+				}
+				paymentService.updateOwing()
+				confirmation(pay.accNo.substring(pay.accNo.length() - 4, pay.accNo.length()),
+					jsonResponse.postStatus==1?"Accepted for Processing":"Declined",
+					jsonResponse.message,
+					jsonResponse.authNumber,
+					amendsToPay,
+					pay.payId,
+					pay.amt,
+					charges
+				)
+			}else {
+				paymentService.updateOwing()
+				confirmation(pay.accNo.substring(pay.accNo.length() - 4, pay.accNo.length()),
+					"ERROR",
+					"Error submitting payment to LAWPRO systems.",
+					"ERROR",
+					amendsToPay,
+					pay.payId,
+					0,
+					0
+				)
+			}
+			
+		}else {
+//			println 'oops!!'
+			redirect uri: '/'
+		}
+		
+	}
+	
+	
+	
+	def confirmation(accNo,payStatus,statusMsg,authCode,payTrxs,confNo,paidAmt,charges) {		
+		println "charges.....$charges"
+		render(view: "confirmation", 
+				model:[accNo:accNo,
+					status:payStatus,
+					statusMsg:statusMsg,
+					authCode:authCode,
+					payTrxs:payTrxs,
+					confNo:confNo,
+					feeMap:feeMap,
+					paidAmt:paidAmt,
+					charges:charges])
+	}
+
+	
+	def renderFilingQtr() {		
+		redirect(controller:"filing", action:"quarter",id:params.id)
+	}
+	
+	def launchConfirmation() {
+		render(view: "confirmation",
+			model:[
+		accNo:"8738",
+		status:"Approved",
+		authCode:"12345678",
+		statusMsg:"Congratulations!  Your credit card was charged 5000.0!",
+		payTrxs:["89":[filingId:14, referKey:"A121040", fy:"2015", qtr:"Q2", cl:9999, re:null, reo:null, totAmt:499950.00, paid:0, due:0]],
+		confNo:"P1262015115436",
+		feeMap:[CL:50, RE:65, REO:50],
+		paidAmt:500.00,
+		charges:10.00
+		])
+	}
+	
+
+}
+
+
+
+

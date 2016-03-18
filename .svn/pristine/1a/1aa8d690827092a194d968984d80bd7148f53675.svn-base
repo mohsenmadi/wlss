@@ -1,0 +1,47 @@
+package com.lss.secure
+
+import com.lss.client.Firm
+
+class SecureController implements Serializable {
+
+	def liuService
+	def domainCreateService
+
+	def user
+	def linkPopFirmMem
+	def linkPopFirmMemUat
+	
+
+	def index() {
+		user = liuService.user.firstName
+		if (Firm.count() == 1) {
+			linkPopFirmMem = 'populate firm/member database tables?'
+			linkPopFirmMemUat = 'populate firm/member database tables for UAT?'
+		} else {
+			linkPopFirmMem = 'tables loaded...'
+			linkPopFirmMemUat = 'tables loaded...'
+		}
+		[user:user, linkPopFirmMem:linkPopFirmMem, linkPopFirmMemUat:linkPopFirmMemUat]
+	}
+	
+	def indexAppInfo() {
+	}
+
+	def populateFirmMember() {
+		if (Firm.count() == 1) {
+			domainCreateService.migrateFirmAndMem()
+			linkPopFirmMem = 'tables loaded...'
+			linkPopFirmMemUat = 'tables loaded...'
+		}
+		render (view:'index', model:[user:user, linkPopFirmMem:linkPopFirmMem, linkPopFirmMemUat:linkPopFirmMemUat])
+	}
+	
+	def populateFirmMemberUat() {
+		if (Firm.count() == 1) {
+			domainCreateService.migrateFirmAndMemUat()
+			linkPopFirmMem = 'tables loaded...'
+			linkPopFirmMemUat = 'tables loaded...'
+		}
+		render (view:'index', model:[user:user, linkPopFirmMem:linkPopFirmMem, linkPopFirmMemUat:linkPopFirmMemUat])
+	}
+}

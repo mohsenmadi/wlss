@@ -1,0 +1,64 @@
+<!-- EFT Payment  -->
+<div id="payEft"  >
+		<div class="row"><div class="col-sm-12" style="height:10px"> </div>	</div>	
+		<div class="row">
+			<div class="col-sm-12" style="text-align: center;"> <span style="color: #20495e;"><strong><u>EFT Details</u></strong></span> </div>
+		</div>
+		
+		<div class="row"><div class="col-sm-12" style="height:10px"> </div>	</div>	
+		<div class="row">
+			<div class="col-sm-4" style="text-align: right;color: #20495e;">Name of account holder:</div>
+			<div class="col-sm-7">
+				<g:textField name="eName" value="" placeholder="Name of account holder" value="${payPref?.name}" size="45"/>
+			 </div>	
+		</div> <!-- name Row -->
+		
+		<div class="row">
+			<div class="col-sm-12" style="height:20px"> </div>
+		</div>
+	
+		<div class="row">
+			<div class="col-sm-10">
+				<g:img src='eft.gif' width="400px"/>
+			 </div>	
+			 <div class="col-sm-2">
+				
+			 </div>	
+		</div> <!-- name Row -->
+		
+		<div class="row"><div class="col-sm-12" style="height:20px"> </div>	</div>
+		<div class="row">
+			<div class="col-sm-4" style="text-align: right;color: #20495e;">Banking Institution:</div>
+			<div class="col-sm-7">	
+				<g:select id="eBank" name="eBank" style = "width:300px" 
+					from="${bankInst.entrySet()}" value="${payPref?.field1}" optionKey="key"
+					optionValue="${value}" noSelection="${['none':'Select...']}"/>				
+			 </div>	
+		</div> <!-- Banking Inst. row -->
+		
+		<div class="row"><div class="col-sm-12" style="height:10px"> </div>	</div>
+		<div class="row">
+			<div class="col-sm-4" style="text-align: right;color: #20495e;">Transit#:</div>
+			<div class="col-sm-7">
+				<g:field name="eTransit" type="text" min="0" maxlength="5" onkeypress="return isNumberKey(event)" value="${payPref?.field3}" size="5"/>
+			 </div>	
+		</div> <!-- Transit# row -->
+		
+		<div class="row"><div class="col-sm-12" style="height:10px"> </div>	</div>
+		<div class="row">
+			<div class="col-sm-4" style="text-align: right;color: #20495e;">Account#:</div>
+			<div class="col-sm-7">
+				<g:field name="eAccount"  type="text" min="0" maxlength="12" onkeypress="return isNumberKey(event)" value="${payPref?.field2}" size="12"/>
+			 </div>	
+		</div> <!-- Transit# row -->	
+</div>
+
+<div class="row"><div class="col-sm-12" style="height:10px"> </div>	</div>	
+
+<div class="row">		
+	<div class="col-sm-1"></div>
+	<div class="col-sm-11"  ><p>
+		<g:checkBox id="cSaveInfo" name="cSaveInfo" checked="${payPref?.preferred}"/>&nbsp;
+		Remember my payment information for future Transaction Levy	Surcharge filings.</p>				
+	</div>		
+</div>

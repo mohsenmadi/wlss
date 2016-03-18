@@ -1,0 +1,11 @@
+package com.lss.custSrv
+
+class CustSrvController {
+
+	def liuService
+
+	def index() { 		
+									
+		[user:liuService.usre.firstName]
+	}
+}

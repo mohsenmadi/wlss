@@ -1,0 +1,12 @@
+<g:set var="liuService" bean="liuService"/>
+
+<g:if test="${liuService.liUserIsFin()}">
+   <div style="height: 18px"></div>
+   <span class="textLawpro" style="font-weight:bold; padding-left:8px;"> Comments</span>
+   <g:textArea id="textAreaFin" name="txtareaBy"
+               value="By ${liuService.liUser.firstName} for ${liuService.username}:"
+               style="height:28px" readonly="readonly"/>
+   <g:textArea id="textAreaFin" name="txtareaReason" maxlength="1000"
+               placeholder="Provide a short reason up to 1000 characters. Text above is included for you."/>
+   <div style="height: 10px"></div>
+</g:if>

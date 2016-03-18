@@ -1,0 +1,44 @@
+<html>
+<head>
+<title>filing summary</title>
+<meta name="layout" content="main" />
+</head>
+<body>
+	<div style="padding: 15px 0px 0px 0px;">
+
+		<div class="container">
+
+			<div id="divBorder3">
+
+				<div class="row" style="padding: 5px 0 0px 15px;">
+
+					<div class="col-sm-6">
+						<div class="row" id="divBorderFirmNums">
+							<g:set var="filingService" bean="filingService" />
+							<g:set var="numMap" value="${filingService.setFilingMap(filing)}" />
+							<g:render template="/common/numbersSummary" />
+						</div>
+					</div>
+
+					<div class="col-sm-4"></div>
+
+					<div class="col-sm-2 text-right" style="padding: 0 35px 0 0;">
+						<div class="row">
+							<g:render template="/common/payButton" model="[label:'make payment']" />
+						</div>
+
+						<div style="height: 5px"></div>
+
+						<div class="row">
+							<g:actionSubmit id="signOut" action="" style="width:110px;" value="payment history" />
+						</div>
+					</div>
+
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>

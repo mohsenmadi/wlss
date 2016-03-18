@@ -1,0 +1,22 @@
+{
+  "found":true,
+  "referStatus":{
+    "referKey":"A121040",
+    "years":[
+      {
+        "yr":"2015",
+        "confirmation":{
+          "number":"WE-1234567",
+          "datetime":"Oct 15, 2015T15:37:17"
+        }
+      },
+      {
+        "yr":"2014",
+        "confirmation":{
+          "number":"WE-1234566",
+          "datetime":"Oct 14, 2015T15:37:17"
+        }
+      }
+    ]
+  }
+}

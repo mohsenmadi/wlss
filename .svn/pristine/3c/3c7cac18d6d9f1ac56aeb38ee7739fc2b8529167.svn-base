@@ -1,0 +1,700 @@
+package com.lss.service
+
+import com.lss.client.Firm
+import com.lss.client.User
+import com.lss.filing.Amendment
+import com.lss.filing.MemberActivity
+import com.lss.enums.ActivityOwner
+
+import grails.transaction.Transactional
+import groovy.json.JsonBuilder
+import groovy.json.JsonOutput
+import groovy.json.JsonSlurper
+
+@Transactional
+class LssWsService {
+
+	def domainCreateService
+	def liuService
+	def filingService
+	def grailsApplication
+	def commonService
+	def paymentService
+	def wsReqService
+
+	def wsFirmSubmitAmnd  = 'amnd/na/'
+	def wsFirmUpdateAmnds = 'amnd/sync/'
+	def wsFindFirm        = 'members/findfirm/'
+	def wsFindLawyer      = 'members/find/'
+	def wsUpdateExempts   = 'xmpt/sync/'
+	def wsFileExempts     = 'xmpt/file/'
+	def wsFirmMembers     = 'members/syncnca/'
+	def wsXmptStatus      = 'xmpt/status/'
+
+	Set setFirmCurrentlyUpdating = []
+
+	def updateFirm() {
+
+		def updateResponse = 'proceed'
+
+		def json = wsReqService.makeGetWsr(wsFindFirm + liuService.username)
+
+		if (!json) {
+			return 'serverCnxnBad'
+		}
+
+		if (!json.found || !json.firm.enabled) {
+			return 'accDisabled'
+		}
+
+		json = json.firm
+
+		if (!liuService.validPassword(json.password)) {
+			updateResponse = validatePassword(json)
+
+		} else {
+			updateFirmFromJson(liuService.user, json)
+		}
+
+		updateResponse
+	}
+
+	def validatePassword(json) {
+		if (json.password && json.password != 'NEW CALL') {
+			liuService.user.setPassword(json.password)
+			println "== pw changed to ${json.password}"
+			return 'changeOfPw'
+		}
+		'noPw'
+	}
+
+	def updateFirmLawyersExempts() {
+		if (liuService.isLawyerOnly()) {
+			return
+		}
+
+		def lawyersCurr = liuService.trimKeys(liuService.lawyersYcurr)
+		def lawyersPrev = liuService.trimKeys(liuService.lawyersYprev)
+
+		def year = Calendar.instance[Calendar.YEAR]
+		def currMems = ['fy':year.toString(), 'lawyersKeys':lawyersCurr]
+		def prevMems = ['fy':--year.toString(), 'lawyersKeys':lawyersPrev]
+		def json = JsonOutput.toJson(['exemptReq':[currMems, prevMems]])
+
+		json = wsReqService.makePostWsr(wsUpdateExempts, json.toString())
+
+		def mapLawyer = liuService.firmLawyers.collectEntries {
+			[it.username, it]
+		}
+
+		json?.exemptYrs.each { setExempts4Lawyers(it, mapLawyer) }
+	}
+
+	def setExempts4Lawyers(json, mapLawyer) {
+		def yearIdx = commonService.getYearIdx(json.fy)
+		json.lawyersStats.each {
+			def lawyer = mapLawyer[it.referKey]
+			lawyer?.exempts[yearIdx].exCl = it.exemptCl
+			lawyer?.exempts[yearIdx].exRe = it.exemptRe
+		}
+	}
+
+	def submitExemptFiling(mapExempt, filingYear, reason4submit, mapMovedMembers, setSearchMembers) {
+		def jsonBuilder = new JsonBuilder()
+		jsonBuilder.exemptFileReq {
+			filer liuService.liUser.username
+			filedFor liuService.username
+			submitReason reason4submit
+			fy filingYear
+			lawyersExStats (mapExempt.collect { k, v ->
+				[
+						referKey: k,
+						exemptCl: v.exCl,
+						exemptRe: v.exRe
+				]
+			})
+		}
+
+		def json = wsReqService.makePostWsr(wsFileExempts, jsonBuilder.toString())
+
+		if (json?.accept) {
+			manageAddedSearchMembers(mapMovedMembers, setSearchMembers)
+		}
+
+		[json?.accept, json.confirmation]
+	}
+
+	def updateContactFromJson(contact, json) {
+		contact.phone = json.phone
+		contact.fax = json.fax
+		contact.street = json.street
+		contact.city = json.city
+		contact.province = json.province
+		contact.postCode = json.postCode
+		contact.email = json.email
+	}
+
+	def updateFirmFromJson(firmAdmin, json) {
+		firmAdmin.firm.name = json.name
+		firmAdmin.lastName = json.name
+		updateContactFromJson(firmAdmin.firm.contact, json)
+	}
+
+	def updateLawyerFromJson(lawyer, json) {
+		lawyer.firstName = json.fname
+		lawyer.lastName = json.lname
+		lawyer.title = json.title
+		lawyer.password = json.password
+		lawyer.enabled = json.enabled
+		// TODO XMPT - remove following 4 lines (or... maybe not)
+		lawyer.exempts[-1].exCl = json.exemptCurrCl
+		lawyer.exempts[-1].exRe = json.exemptCurrRe
+		lawyer.exempts[-2].exCl = json.exemptPrevCl
+		lawyer.exempts[-2].exRe = json.exemptPrevRe
+
+		updateContactFromJson(lawyer.contact, json)
+	}
+
+	def updateLawyer() {
+
+		def json = wsReqService.makeGetWsr(wsFindLawyer + liuService.username)
+
+		if (!json) {
+			return 'serverCnxnBad'
+		}
+
+		if (!json.found || !json.member.enabled) {
+			return 'accDisabled'
+		}
+
+		def updateResponse
+
+		json = json.member
+
+		if (!liuService.validPassword(json.password)) {
+
+			updateResponse = validatePassword(json)
+
+		} else if (!json.firmKey.equalsIgnoreCase(liuService.firm.referKey)) {
+
+			migrateLawyer(liuService.user, json)
+			updateResponse = 'changeOfFirm'
+
+		} else {
+			updateLawyerFromJson(liuService.user, json)
+			updateResponse = 'proceed'
+		}
+
+		updateResponse
+	}
+
+	def buildLawyerJson(lawyer) {
+			def contact = lawyer.contact
+		def jsonBuilder =
+				[referKey:lawyer.username,
+				 title:lawyer.title,
+				 fname:lawyer.firstName,
+				 lname:lawyer.lastName,
+				 password:lawyer.password,
+				 firmKey:lawyer.firm.referKey,
+				 enabled:lawyer.enabled,
+				 street:contact.street,
+				 phone:contact.phone,
+				 fax:contact.fax,
+				 city:contact.city,
+				 province:contact.province,
+				 postCode:contact.postCode,
+				 email:contact.email]
+		jsonBuilder
+	}
+
+	def migrateLawyer(lawyerAccOld, json) {
+		def size = User.findAllByUsernameIlike(lawyerAccOld.username + '~%').size() + 1
+		def archiveUsername = lawyerAccOld.username + '~' + size
+
+		lawyerAccOld.setUsername(archiveUsername)
+		lawyerAccOld.setEnabled(false)
+		lawyerAccOld.save(flush:true)
+
+		def newFirm = getNewLawyerFirm(json.firmKey)
+
+		if (!newFirm) {
+			return 'firmNotFound'
+		}
+
+		def lawyerAccNew = domainCreateService.createLawyer(
+				domainCreateService.buildUser(json, newFirm))
+
+		lawyerAccNew.setProperty("notifications", lawyerAccOld.notifications)
+		lawyerAccNew.setProperty("filingYears", lawyerAccOld.filingYears)
+		lawyerAccNew.setProperty("exempts", lawyerAccOld.exempts)
+		lawyerAccNew.setProperty("contact", lawyerAccOld.contact)
+
+		def movedMemActivities = []
+		lawyerAccOld.memActivities.each {
+			if (it.activityOwner == ActivityOwner.LAWYER) {
+				it.setMember(lawyerAccNew)
+				movedMemActivities.add(it)
+			}
+		}
+		movedMemActivities.each {
+			lawyerAccOld.removeFromMemActivities(it)
+			lawyerAccNew.addToMemActivities(it)
+		}
+
+		lawyerAccOld.setProperty("notifications", null)
+		lawyerAccOld.setProperty("filingYears", null)
+		lawyerAccOld.setProperty("exempts", null)
+		lawyerAccOld.setProperty("contact", null)
+
+		lawyerAccNew
+	}
+
+	def getNewLawyerFirm(firmReferKey) {
+		def firm = Firm.findByReferKey(firmReferKey)
+		firm ?: registerFirm(firmReferKey)
+	}
+
+	def userExists(userid) {
+		User.findByUsername(userid)
+	}
+
+	def registerLawyer(referKey) {
+
+		def json = wsReqService.makeGetWsr(wsFindLawyer + referKey)
+
+		if (!json || !json.found) {
+			return null
+		}
+
+		json = json.member
+
+		boolean firmPossiblyNew = true
+
+		// in case firm is currently logged in and doing lawyer update, we wait
+		Thread.start {
+			while (setFirmCurrentlyUpdating.contains(json.firmKey)) {
+				sleep 1000
+				firmPossiblyNew = false
+			}
+		}.join()
+
+		if (userExists(referKey)) {
+			return true
+		}
+
+		def firm = getNewLawyerFirm(json.firmKey)
+		firmPossiblyNew = !firmPossiblyNew ? false : User.findAllByFirm(firm).size() == 1
+
+		def lawyer = domainCreateService.registerLawyer(json, firm)
+		updateLawyerFromJson(lawyer, json)
+
+		if (firmPossiblyNew) {
+			Thread.start {
+				registerFirmMembers(firm)
+			}
+		}
+
+		lawyer
+	}
+
+	def registerFirmAndItsMembersDebug(referKey) {
+
+		File file = grailsApplication.mainContext.getResource('sampleData/devFirm.json').file
+		def json = new JsonSlurper().parse(file)
+		def firm = domainCreateService.registerFirm(json.firm)
+
+		file = grailsApplication.mainContext.getResource('sampleData/devFirmMems.json').file
+		json = new JsonSlurper().parse(file)
+
+		def mapOfFilings = [:]
+		firm.filingYears.filings*.each {
+			mapOfFilings["${it.filingYear.year}-${it.quarter[1]}"] = it.amendments[0]
+		}
+
+		json.lawyers.eachWithIndex { currLaywer, idx ->
+			def lawyer = domainCreateService.registerLawyer(currLaywer.lawyer, firm)
+			currLaywer.qtrs.each { filingKey ->
+				domainCreateService.createNewMemActivity(mapOfFilings[filingKey], lawyer, ActivityOwner.FIRM)
+			}
+		}
+
+		firm
+	}
+
+	def registerFirmAndItsMembers(referKey) {
+		if (userExists(referKey)) {
+			return null
+		}
+
+		def firm = registerFirm(referKey)
+		if (firm) {
+			Thread.start {
+				registerFirmMembers(firm)
+			}
+		}
+		referKey
+	}
+
+	def registerFirm(referKey) {
+		if (userExists(referKey)) {
+			return null
+		}
+
+		def json = wsReqService.makeGetWsr(wsFindFirm + referKey)
+		if (!json || !json.found) {
+			return null
+		}
+
+		domainCreateService.registerFirm(json.firm)
+	}
+
+	def registerFirmMembers(firm) {
+
+		setFirmCurrentlyUpdating.add(firm.referKey)
+
+		println ""
+		def json = wsReqService.makeGetWsr(wsFirmMembers + firm.referKey)
+		if (!json) {
+			addNotification("There may be update problems due to slow network connection", "Lawyers List", 1)
+			setFirmCurrentlyUpdating.remove(firm.referKey)
+			return
+		}
+
+		def mapOfFilings = [:]
+		firm.filingYears.filings*.each {
+			mapOfFilings["${it.filingYear.year}-${it.quarter[1]}"] = it.amendments[0]
+		}
+
+
+		final def size = json.lawyers.size()
+		println " == firm has ${size} lawyers"
+		def timeTaken = System.currentTimeMillis()
+
+		json.lawyers.eachWithIndex { currLaywer, idx ->
+			def lawyer = domainCreateService.registerLawyer(currLaywer.lawyer, firm)
+
+			print "  == adding ${idx+1}/${size} $lawyer.username: "
+			currLaywer.qtrs.each { filingKey ->
+				print "$filingKey  "
+				domainCreateService.createNewMemActivity(mapOfFilings[filingKey], lawyer, ActivityOwner.FIRM)
+			}
+			println ""
+		}
+
+		println "==== time taken: ${System.currentTimeMillis() - timeTaken}"
+
+		setFirmCurrentlyUpdating.remove(firm.referKey)
+	}
+
+	def getSearchMember(memKey, firm) {
+
+		def searchMember
+
+		def json = wsReqService.makeGetWsr(wsFindLawyer + memKey)
+		if (json.found) {
+			searchMember = domainCreateService.buildUser(json.member, firm)
+		}
+
+		// TODO: throw-away code below
+		if (!searchMember) {
+			searchMember = lawyerMap[memKey]
+			if (searchMember) {
+				searchMember = new User (
+						username:memKey,
+						title:searchMember.title,
+						firstName:searchMember.firstName,
+						lastName:searchMember.lastName,
+						enabled:true,
+						password:searchMember.password,
+						firm:firm
+				)
+			}
+		}
+
+		searchMember
+	}
+
+	def updateExemptionStatus() {
+		updateExemptionStatus("2014,2015")
+	}
+
+	def updateExemptionStatus(years) {
+		def url = "${wsXmptStatus}${liuService.username}?years=${years}"
+
+		def json = wsReqService.makeGetWsr(url)
+
+		if (!json.found) {
+			return
+		}
+		json = json.referStatus
+
+		json.years.forEach {
+			def exFyIdx = commonService.getYearIdx(it.yr)
+			def exFy = liuService.filingYears[exFyIdx]
+
+			exFy.exConfNum = it.confirmation.number
+			exFy.exConfDate = Date.parse("MMM dd, yyyy'T'HH:mm:ss", it.confirmation.datetime)
+
+//			if (liuService.isLawyerOnly()) {
+//				liuService.user.exempts[exFyIdx].exCl = it.status.cl
+//				liuService.user.exempts[exFyIdx].exRe = it.status.re
+//			}
+		}
+	}
+
+	def updateFilings() {
+
+		def timeTaken = System.currentTimeMillis()
+		liuService.filingYears.filings*.each { filing ->
+			if (filingService.isQrEnabled(filing)) {
+				println "*** updating ${filing.filingYear.year} - ${filing.quarter} ***"
+				updateFiling(filing)
+			}
+		}
+		println "==== time taken: ${System.currentTimeMillis() - timeTaken}"
+	}
+
+	def updateFiling(filing) {
+		def year = filing.filingYear.year
+		def qr = filing.quarter[1]
+		def trxId = filing.lastTrxId
+		def url = "${wsFirmUpdateAmnds}${liuService.username}/$year/$qr?lt=$trxId"
+
+		def json = wsReqService.makeGetWsr(url)
+
+		if (!json) {
+			addNotification("There may be update problems due to slow network connection", "$year - ${filing.quarter}", 1)
+			return
+		}
+
+		if (!json.accept) {
+			updateAmnds(json, filingService.getLastAmendment(filing), filing)
+		}
+
+		updateFirmFilingStatus(filing, json)
+	}
+
+	def updateFirmFilingStatus(filing, json) {
+		if (liuService.isLawyerOnly()) {
+			// TODO remove condition as json provides firmFiledXx - filing.firmFiledXx = json?firmFiledXx
+			filing.firmFiledCl = json?.firmFiledCl ? true : false
+			filing.firmFiledRe = json?.firmFiledRe ? true : false
+		}
+	}
+
+	def submitAmendment(filing, lastAmnd, newAmnd, reason4submit,
+							  mapMovedMembers, setSearchMembers) {
+		def dcl = (newAmnd?.cl ?: 0) - (lastAmnd?.cl ?: 0)
+		def dre = (newAmnd?.re ?: 0) - (lastAmnd?.re ?: 0)
+		def dreo = (newAmnd?.reo ?: 0) - (lastAmnd?.reo ?: 0)
+
+		def jsonBuilder = new JsonBuilder()
+		jsonBuilder.ggFiling {
+			filer liuService.liUser.username
+			filedFor liuService.username
+			submitReason reason4submit
+			fy filing.filingYear.year
+			fq filing.quarter[1]
+			lastTrxId filing.lastTrxId
+
+			numbers {
+				cl(
+						val: dcl,
+						isFiled: newAmnd.cl != null ? true : false
+				)
+				re(
+						val: dre,
+						isFiled: newAmnd.re != null ? true : false
+				)
+				reo(
+						val: dreo,
+						isFiled: newAmnd.reo != null ? true : false
+				)
+			}
+
+			members (newAmnd.memActivities.collect { ma ->
+				[
+						referKey: ma.member.username[0..7],
+						inCl: ma.activeCl,
+						inRe: ma.activeRe
+				]
+			})
+		}
+
+		def json = wsReqService.makePostWsr(wsFirmSubmitAmnd, jsonBuilder.toString())
+		if (json?.accept) {
+			addAmendment(json, newAmnd, filing, mapMovedMembers, setSearchMembers)
+		} else {
+			updateAmnds(json, lastAmnd, filing)
+		}
+	}
+
+	def getNewNum(blAmnd, wsNumField, ggNum, type) {
+		def blNum
+		if (!wsNumField.isFiled) {
+			if (blAmnd) {
+				blNum = type.equals('cl') ? blAmnd.cl : type.equals('re') ? blAmnd.re : blAmnd.reo
+			}
+		}
+		(wsNumField.isFiled) ? (wsNumField.val + (ggNum ?: 0)) : blNum
+	}
+
+	def updateAmnds(json, lastAmnd, filing) {
+
+		def lastTrxId = json.lastTrxId
+		def updatedAmnd = lastAmnd
+		def i = 1
+
+
+//		def timeTaken = System.currentTimeMillis()
+		def blAmnd = filingService.getBeforeLastAmendment(filing)
+		def activityOwner = liuService.activityOwner
+//		println "    000blAmnd000 :: ${System.currentTimeMillis() - timeTaken}\t "
+
+		json.amnds.each {
+
+//			timeTaken = System.currentTimeMillis()
+
+			def newAmnd = new Amendment(
+					cl:getNewNum(blAmnd, it.numbers.cl, updatedAmnd.cl, 'cl'),
+					re:getNewNum(blAmnd, it.numbers.re, updatedAmnd.re, 're'),
+					reo:getNewNum(blAmnd, it.numbers.reo, updatedAmnd.reo, 'reo'),
+					confirmation:it.confirmation,
+					filing:filing).save()
+			newAmnd.dateCreated = Date.parse("MMM dd, yyyy'T'HH:mm:ss", it?.dateTime)
+
+//			print "    1 :: ${System.currentTimeMillis() - timeTaken}\t "
+
+			newAmnd.memActivities = new HashSet()
+
+			updatedAmnd.memActivities.each {
+				newAmnd.addToMemActivities(
+						new MemberActivity(
+								activityOwner:activityOwner,
+								amendment:newAmnd,
+								member:it.member))
+			}
+
+//			print "2 :: ${System.currentTimeMillis() - timeTaken}\t "
+
+			filing.setLastTrxId(lastTrxId)
+			filing.addToAmendments(newAmnd)
+
+//			print "3 :: ${System.currentTimeMillis() - timeTaken}\t "
+
+			setNewMemActivities(newAmnd, it.members)
+
+//			print "4 :: ${System.currentTimeMillis() - timeTaken}\t "
+
+			updatedAmnd = newAmnd
+			println "   == created amnd ${i++}: $newAmnd" // \t:: ${System.currentTimeMillis() - timeTaken}"
+		}
+
+//		timeTaken = System.currentTimeMillis()
+
+		def size = json.amnds.size()
+		def sStr = size > 1 ? 's' : ''
+
+
+		def relatedTo = "${filing.filingYear.year} - ${filing.quarter}"
+		addNotification("Filing updated by $size amendment$sStr", relatedTo, 1)
+
+//		println "    999notify999 :: ${System.currentTimeMillis() - timeTaken}\t "
+
+
+		[updatedAmnd, filing]
+	}
+
+	def addNotification(msg, relatedTo, code) {
+		domainCreateService.addNotification(msg, relatedTo, code)
+	}
+
+	def setNewMemActivities(amnd, jsonMems) {
+
+		def mapMemActivities = amnd.memActivities.collectEntries {
+			[it.member.username, it]
+		}
+
+		def lawyer
+
+		jsonMems.each {
+
+			def memActivity = mapMemActivities[it.referKey]
+
+			if (memActivity) {
+				memActivity.activeCl = it.inCl
+				memActivity.activeRe = it.inRe
+
+				lawyer = memActivity.member
+				lawyer.firstName = it.fname
+				lawyer.lastName = it.lname
+				lawyer.password = it.password
+
+			} else if (liuService.hasFirmRole()) {
+
+				lawyer = User.findByUsername(it.referKey)
+
+				if (lawyer) {
+					if (lawyer.firm.referKey != liuService.firm.referKey) {
+						def lawyerJson = buildLawyerJson(lawyer)
+						lawyerJson.firmKey = liuService.firm.referKey
+						lawyerJson.password = it.password
+
+						lawyer = migrateLawyer(lawyer, lawyerJson)
+					}
+				} else {
+					lawyer = domainCreateService.createLawyerFysAmnds(
+							domainCreateService.buildUser(it, liuService.firm))
+				}
+
+				def newMemActivity = new MemberActivity(
+						activeCl:it.inCl,
+						activeRe:it.inRe,
+						activityOwner:liuService.activityOwner,
+						amendment:amnd,
+						member:lawyer)
+				newMemActivity.save()
+				amnd.addToMemActivities(newMemActivity)
+			}
+		}
+	}
+
+	def addAmendment(json, amnd, filing, mapMovedMembers, setSearchMembers) {
+		manageAddedSearchMembers(mapMovedMembers, setSearchMembers)
+
+		amnd.confirmation = json.confirmation
+		amnd.filing = filing
+		filing.addToAmendments(amnd)
+		filing.lastTrxId = json.lastTrxId
+		filing.save(flush:false)
+
+		[amnd, filing]
+	}
+
+	def manageAddedSearchMembers(mapMovedMembers, setSearchMembers) {
+		mapMovedMembers.each { k, v ->
+			k.setUsername(v.archiveUsername)
+			k.setEnabled(false)
+			k.save(flush:true)
+		}
+
+		setSearchMembers.each { domainCreateService.createLawyerFysAmnds(it) }
+	}
+
+	def updateOutstanding() {
+		paymentService.updateOwing()
+	}
+
+	def lawyerMap = [
+			'A111111X':new User(username:'A111111X', firstName:'Joseph', lastName:'Perrier', password:'A111111Xlss'),
+			'A111111X1':new User(username:'A111111X1', firstName:'Joseph1', lastName:'Perrier1', password:'A111111X1lss'),
+			'A222222X':new User(username:'A222222X', firstName:'Stephanie', lastName:'Smith', password:'A222222Xlss'),
+			'A333333X':new User(username:'A333333X', firstName:'Meagan', lastName:'Thelma', password:'A333333Xlss'),
+			'A444444X':new User(username:'A444444X', firstName:'Macarena', lastName:'Barker', password:'A444444Xlss'),
+			'A555555X':new User(username:'A555555X', firstName:'Andreas', lastName:'Seibert', password:'A555555Xlss')
+	]
+}
+
+//		println JsonOutput.prettyPrint(jsonBuilder.toString())
+//		println JsonOutput.prettyPrint(wsResponse.text)

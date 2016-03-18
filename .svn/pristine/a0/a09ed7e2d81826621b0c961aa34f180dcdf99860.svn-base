@@ -1,0 +1,30 @@
+package com.lss.service
+
+import grails.plugins.rest.client.RestBuilder
+import groovy.json.JsonOutput
+
+class WsReqService {
+
+	String wsUrl
+//	def mapHeader = ["X-LSS-Env":"dev"]
+	def mapHeader = ["X-LSS-Env":"uatest"]
+	def mapParams = [headers:mapHeader,	connectTimeout:10000, readTimeout:20000]
+
+	def makeGetWsr(serviceUrl) {
+		def timeTaken = System.currentTimeMillis()
+		def rest = new RestBuilder(mapParams)
+		def response = rest.get("$wsUrl/$serviceUrl") { accept "application/json" }
+		response.json
+	}
+
+	def makePostWsr(serviceUrl, jsonBuilder) {
+		def timeTaken = System.currentTimeMillis()
+		def rest = new RestBuilder(mapParams)
+		def response = rest.post("$wsUrl/$serviceUrl") {
+			accept "application/json"
+			contentType "application/json"
+			json jsonBuilder
+		}
+		response.json
+	}
+}

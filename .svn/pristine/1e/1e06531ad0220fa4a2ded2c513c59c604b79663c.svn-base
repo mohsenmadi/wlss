@@ -1,0 +1,128 @@
+package com.lss.dispatch
+
+import grails.plugin.springsecurity.SpringSecurityUtils
+
+import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.web.context.request.RequestContextHolder
+
+import com.lss.enums.LssRole
+import com.lss.service.PaymentService;
+
+class DispatchController {
+
+    // test.
+
+    def lssWsService
+    def sessionIdUdser
+    def sessionIdFiling
+    def paymentService
+    def commonService
+    def liuService
+
+    def index() {
+
+        def controller = 'login'
+        def action = 'auth'
+        def updateResponse
+
+        if (SpringSecurityUtils.ifAllGranted(LssRole.ROLE_ADMIN.toString())) {
+            controller = 'secure'
+            action = 'index'
+
+        } else if (SpringSecurityUtils.ifAllGranted(LssRole.ROLE_FINANCE.toString())) {
+            liuService.resetForUsername()
+            controller = 'finance'
+            action = 'index'
+
+        } else if (SpringSecurityUtils.ifAllGranted(LssRole.ROLE_CUSTSRV.toString())) {
+            controller = 'custSrv'
+            action = 'index'
+
+        } else if (SpringSecurityUtils.ifAllGranted(LssRole.ROLE_FIRM.toString()) ||
+                SpringSecurityUtils.ifAllGranted(LssRole.ROLE_LAWYER.toString())) {
+
+            updateResponse = commonService.runLocally ? 'proceed' : updateUserAsNeeded()
+            println "==updateResponse: $updateResponse"
+
+            if (updateResponse.equals('accDisabled')) {
+                denyService('Your account is disabled! Please contact LawPRO for more information.')
+            } else if (updateResponse.equals('changeOfPw')) {
+                denyService('Please login with your new account username/password credentials.')
+            } else if (updateResponse.equals('noPw')) {
+                denyService('Please contact LawPRO to reset your username/password credentials.')
+            } else if (updateResponse.equals('changeOfFirm')) {
+                denyService('Your account is updated with the new firm! Please relogin using the same credentials.')
+            } else if (updateResponse.equals('serverCnxnBad')) {
+                denyService('Sorry for the inconvenience, there are some network problems! Please try again later.')
+            } else {
+                def userType = liuService.isLawyerOnly() ? 'lawyer' : 'firm'
+                println "==============================="
+                println "=== $userType logging in: ${liuService.user.username}"
+                println "==============================="
+                commonService.runLocally ? 'proceed' : updateFilingsIfNeeded(!liuService.isLawyerOnly())
+                controller = 'filing'
+                action = 'summary'
+            }
+
+        } else { // get here if account has no role associated
+            println "== user has no role!"
+            denyService('Account identification problems encountered. Please contact LawPRO for more information.')
+        }
+
+        redirect controller: controller, action: action
+    }
+
+    def denyService(msg) {
+        flash.message = msg
+        SecurityContextHolder.clearContext()
+    }
+
+    def updateUserAsNeeded() {
+        def tempSessionId = getSessionId()
+        if (sessionIdUdser != tempSessionId) {
+            sessionIdUdser = tempSessionId
+            return liuService.isLawyerOnly() ? lssWsService.updateLawyer() : lssWsService.updateFirm()
+        }
+        'proceed'
+    }
+
+    def refreshFilingsAndExempts() {
+        sessionIdFiling = null
+        redirect action:'index'
+    }
+
+    def updateFilingsIfNeeded(updateExempts) {
+        def tempSessionId = getSessionId()
+        if (sessionIdFiling == tempSessionId) {
+            return 'proceed'
+        }
+
+        sessionIdFiling = tempSessionId
+
+        def username = liuService.user.username
+        // in case lawyer whose firm is this one is logged in and doing firm-lawyer update, we wait
+        Thread.start {
+            while (lssWsService.setFirmCurrentlyUpdating.contains(username)) {
+                sleep 1000
+            }
+        }.join()
+
+        lssWsService.updateFilings()
+        paymentService.updateOwing()
+        !updateExempts ?: lssWsService.updateFirmLawyersExempts()
+        'proceed'
+    }
+
+    def getSessionId() {
+        RequestContextHolder.getRequestAttributes()?.getSessionId()
+    }
+
+    def reloadDataForPage(){
+        def targetUri = params.targetUri ?: "/"
+        println targetUri
+        commonService.runLocally ? 'proceed' : updateFilingsIfNeeded(!liuService.isLawyerOnly())
+        redirect(uri: targetUri)
+
+    }
+
+}

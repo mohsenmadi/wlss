@@ -1,0 +1,86 @@
+package com.lss.lp
+
+import com.lss.client.User
+import com.lss.events.SecurityCareTaker
+
+class LpController implements Serializable {
+
+	def liuService
+	def lssWsService
+	def paymentService
+	def commonService
+
+	def forUsername
+	def isFirm
+	def lawyers
+
+	def index() {
+		forUsername = User.findByUsername(params.id) ?: forUsername
+
+		if (forUsername) {
+			lawyers = lawyers ?: getLawyers()
+			isFirm = !forUsername ?: liuService.hasFirmRole(forUsername)
+		}
+
+		liuService.setForUsername(forUsername?.username)
+
+		[forUsername:forUsername, isFirm:isFirm, lawyers: lawyers,
+		 user:liuService.user.firstName]
+	}
+
+	def searchReferKey() {
+		def referKey = params.referKey.trim().toUpperCase()
+		forUsername = User.findByUsername(referKey)
+		if (!forUsername) {
+			new SecurityCareTaker().registerUser(params.referKey)
+			forUsername = User.findByUsername(referKey)
+		}
+
+		liuService.setForUsername(forUsername?.username)
+
+		isFirm = !forUsername ?: liuService.hasFirmRole(forUsername)
+		lawyers = getLawyers()
+
+		render(template:'referKeyDetails',
+				model:[forUsername:forUsername, isFirm:isFirm, lawyers: lawyers,
+						 msg2user:'referKey not registered-#dd0000'])
+	}
+
+	def getLawyers() {
+		if (forUsername) {
+			commonService.runLocally ?: paymentService.updateOwing()
+
+			def lawyers = forUsername.firm.users?.collectEntries {
+				["${it.username}", it]
+			}?.sort()
+			lawyers?.remove("${forUsername.firm.referKey}")
+			lawyers
+		}
+	}
+
+	def show() {
+		def username = forUsername?.firm?.referKey
+
+		if (!username) {
+			redirect action:'index', id:params.id
+
+		} else {
+			Thread.start {
+				while (lssWsService.setFirmCurrentlyUpdating.contains(username)) {
+					sleep 500
+				}
+			}.join()
+
+			liuService.setForUsername(params.id)
+
+			if (!commonService.runLocally) {
+				lssWsService.updateFilings()
+				paymentService.updateOwing()
+				// TODO: don't do next if liu is lawyer (and nor firm)
+				lssWsService.updateFirmLawyersExempts()
+			}
+
+			redirect controller:'filing', action:'summary'
+		}
+	}
+}
